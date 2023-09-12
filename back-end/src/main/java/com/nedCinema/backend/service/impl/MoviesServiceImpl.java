@@ -55,6 +55,7 @@ public class MoviesServiceImpl implements MoviesService {
         existingMovie.setPoster(updatedMovie.getPoster());
         existingMovie.setTrailer(updatedMovie.getTrailer());
         existingMovie.setBanner(updatedMovie.getBanner());
+        existingMovie.setStatus(updatedMovie.getStatus());
 
         return moviesRepository.save(existingMovie);
     }

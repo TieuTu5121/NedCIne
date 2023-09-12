@@ -21,10 +21,10 @@ public class RoomsServiceImpl implements RoomsService {
 
     @Override
     public void addRoom(Rooms room) {
-        Cinemas cinema = cinemasRepository.findById(room.getCinema_ID().getId()).orElse(null);
+        Cinemas cinema = cinemasRepository.findById(room.getCinemaID().getId()).orElse(null);
 
         if (cinema != null) {
-            room.setCinema_ID(cinema);
+            room.setCinemaID(cinema);
             roomRepository.save(room);
         } else {
             throw new NotFoundException();
@@ -53,7 +53,7 @@ public class RoomsServiceImpl implements RoomsService {
             Rooms existingRoom = optionalRoom.get();
             existingRoom.setRoomName(room.getRoomName());
             existingRoom.setSeatQuantity(room.getSeatQuantity());
-            existingRoom.setCinema_ID(room.getCinema_ID());
+            existingRoom.setCinemaID(room.getCinemaID());
             return roomRepository.save(existingRoom);
         } else {
             throw new NotFoundException();
