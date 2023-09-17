@@ -25,6 +25,7 @@ function SignIn() {
 
       if (response?.data?.codeStatus === 200) {
         setUser(response?.data.data.user);
+
         navigate("/default");
         toast.success("Đăng nhập thành công!!!");
       } else {

@@ -1,18 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
-import authApi from "../apis/auth";
+import { getToken, removeData, setData } from "../configs/authentication";
 
 const Header = () => {
   const [search, setSearch] = useState("");
-  const { user } = useContext(UserContext);
-  // useEffect(() => {
-  //   authApi.profile().then();
-  //   console.log("user data >> ", userData);
-  // }, [user]);
-  // console.log(user);
+  const { user, setUser } = useContext(UserContext);
+
+  const navigate = useNavigate();
+
   const signOut = () => {
-    // Add your sign out logic here
+    removeData();
+    console.log("Remove Token!!!");
+    setUser(null);
+    navigate("/default/login");
   };
 
   return (

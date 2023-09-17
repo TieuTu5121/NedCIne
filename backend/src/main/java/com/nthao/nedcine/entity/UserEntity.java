@@ -27,16 +27,17 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Entity
 @Builder
-@Table(name = "users")
+@Table (name = "users")
 public class UserEntity implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String password;
     private String email;
-    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
+
+    @ElementCollection (targetClass = Role.class, fetch = FetchType.EAGER)
+    @Enumerated (EnumType.STRING)
     private Set<Role> roles;
 
     @Override

@@ -1,59 +1,43 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-const SignUp = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    fullname: "",
-    phoneNumber: "",
-  });
-  const [error, setError] = useState(null);
-  const [isPending, setIsPending] = useState(false);
-  document.title = "NedCine - Đăng ký";
+import authApi from "../../apis/auth";
+import { toast } from "react-hot-toast";
+import { Link, useNavigate } from "react-router-dom";
+export default function SignUp() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); // Thêm biến loading
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsPending(true);
-    setError(null);
+  const register = async (event) => {
+    event.preventDefault(); // Ngăn chặn việc submit form mặc định
 
     try {
-      // Thực hiện gọi API hoặc xử lý đăng ký tài khoản ở đây
-      // Ví dụ sử dụng fetch:
-      const response = await fetch("URL_API_SIGNUP", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      setLoading(true); // Bắt đầu quá trình loading
 
-      if (!response.ok) {
-        // Xử lý lỗi nếu có
-        const data = await response.json();
-        throw new Error(data.message || "Đã xảy ra lỗi khi đăng ký.");
+      // Gọi API để đăng nhập
+      const response = await authApi.register(email, username, password);
+      console.log(response?.data?.codeStatus);
+      // Xử lý thành công
+      if (response?.data?.codeStatus === 200) {
+        // Xử lý logic sau khi đăng nhập thành công, ví dụ chuyển hướng trang
+        toast.success("Đăng ký thành công!!!");
+        navigate("/default");
+      } else {
+        // Xử lý khi đăng nhập thất bại
+        toast.error("Đăng ký thất bại!!!");
       }
-
-      // Đăng ký thành công, bạn có thể thực hiện các hành động khác ở đây
-      // Chẳng hạn, chuyển hướng người dùng đến trang đăng nhập
-      history.push("/sign-in");
-    } catch (err) {
-      setError(err.message);
+    } catch (error) {
+      console.error("Register error:", error);
+      toast.error("An error occurred while logging in");
     } finally {
-      setIsPending(false);
+      setLoading(false); // Kết thúc quá trình loading
     }
   };
-
   return (
     <>
-      <form className="px-96 mt-28" onSubmit={handleSubmit}>
+      <form className="px-96 mt-28" onSubmit={register}>
         <h1 className="text-3xl font-bold text-center mb-2">ĐĂNG KÝ</h1>
         <h3 className="text-center">
           Đã có tài khoản?{" "}
@@ -67,13 +51,37 @@ const SignUp = () => {
         <div className="mt-8">
           {/* Các trường đăng ký */}
           <div className="flex flex-col mt-2">
-            <input
+            {/* <input
               className="rounded-lg px-4 py-3 placeholder-italic bg-gray-100 focus:border-0 focus:outline-0 focus:bg-white focus:shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)] mb-2"
               type="email"
               placeholder="Email"
               name="email"
               value={formData.email}
               onChange={handleChange}
+              required
+            /> */}
+            <input
+              className="rounded-lg px-4 py-3 placeholder-italic bg-gray-100 focus:border-0 focus:outline-0 focus:bg-white focus:shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)] mb-2"
+              type="text"
+              placeholder="John Doe"
+              value={username}
+              onChange={(ev) => setUsername(ev.target.value)}
+              required
+            />
+            <input
+              className="rounded-lg px-4 py-3 placeholder-italic bg-gray-100 focus:border-0 focus:outline-0 focus:bg-white focus:shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)] mb-2"
+              type="email"
+              placeholder="your@email.com"
+              value={email}
+              onChange={(ev) => setEmail(ev.target.value)}
+              required
+            />
+            <input
+              className="rounded-lg px-4 py-3 placeholder-italic bg-gray-100 focus:border-0 focus:outline-0 focus:bg-white focus:shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)] mb-2"
+              type="password"
+              placeholder="Mật khẩu"
+              value={password}
+              onChange={(ev) => setPassword(ev.target.value)}
               required
             />
           </div>
@@ -82,29 +90,27 @@ const SignUp = () => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-500"
-              disabled={isPending}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg mt-4 mr-2   hover:bg-blue-500"
+              disabled={loading}
             >
-              Đăng ký
+              {loading ? "Đang đăng ký..." : "Đăng ký"}
             </button>
             <button
               className="bg-gray-800 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-500 cursor-not-allowed"
-              disabled={!isPending}
+              disabled={!loading}
             >
-              {isPending ? "Đang đăng ký..." : "Đăng ký"}
+              Trở về
             </button>
           </div>
         </div>
 
         {/* Hiển thị lỗi nếu có */}
-        {error && (
+        {/* {error && (
           <div className="text-center mt-5">
             <span className="text-red-400">{error}</span>
           </div>
-        )}
+        )} */}
       </form>
     </>
   );
-};
-
-export default SignUp;
+}
