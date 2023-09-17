@@ -28,14 +28,14 @@ function AdminSidebar({ dashboard }) {
   //   }, []);
 
   return (
-    <div className="fixed w-[254px]">
+    <div className="fixed w-[254px] h-full relative">
       <Link to="/admin">
         <h1 className="text-2xl font-bold pt-8 pb-2 text-center">DASHBOARD</h1>
       </Link>
       <h3 className="text-center pb-6">
         Xin chào, <span className="text-yellow-200">User Name</span>
       </h3>
-      <ul className="flex flex-col relative">
+      <ul className="flex flex-col ">
         <li
           className={`border-2 border-gray-300 cursor-pointer flex justify-between items-center ${
             dashboard === "movie" ? "bg-blue-600" : ""
@@ -69,9 +69,22 @@ function AdminSidebar({ dashboard }) {
         >
           <Link
             className="block px-4 py-4 hover:bg-blue-600 w-full"
-            to="/admin/movie-management"
+            to="/admin/showtime-management"
           >
             Quản lý suất chiếu
+          </Link>
+          <i className="fa-solid fa-chevron-right right-4 absolute"></i>
+        </li>
+        <li
+          className={`border-b-2 border-gray-300 cursor-pointer flex justify-between items-center ${
+            dashboard === "food" ? "bg-blue-600" : ""
+          }`}
+        >
+          <Link
+            className="block px-4 py-4 hover:bg-blue-600 w-full"
+            to="/admin/product-management"
+          >
+            Quản lý sản phẩm
           </Link>
           <i className="fa-solid fa-chevron-right right-4 absolute"></i>
         </li>
@@ -82,13 +95,14 @@ function AdminSidebar({ dashboard }) {
           }`}
         >
           <Link
-            className="block px-4 py-4 hover-bg-blue-600 w-full"
+            className="block px-4 py-4 hover:bg-blue-600 w-full"
             to="/admin/employee-management"
           >
             Quản lý nhân viên
           </Link>
           <i className="fa-solid fa-chevron-right right-4 absolute"></i>
         </li>
+
         {/* )} */}
         <li
           className={`border-b-2 border-gray-300 cursor-pointer flex justify-between items-center ${
@@ -104,10 +118,10 @@ function AdminSidebar({ dashboard }) {
           <i className="fa-solid fa-chevron-right right-4 absolute"></i>
         </li>
         <li
-          className={`border-b-2 border-gray-300 cursor-pointer flex justify-between items-center flex-grow`}
+          className={`border-b-2 border-t-2 border-gray-300 cursor-pointer flex justify-between items-center flex-grow absolute bottom-0 w-full`}
         >
           <Link
-            className="block px-4 py-4 hover:bg-blue-600 w-full"
+            className="block px-4 py-4 hover:bg-red-600 w-full"
             // onClick={signOut}
           >
             Đăng xuất

@@ -1,4 +1,4 @@
-import { removeToken } from "../configs/authentication";
+import { removeData } from "../configs/authentication";
 import http from "../configs/http";
 
 const authApi = {
@@ -16,7 +16,7 @@ const authApi = {
 
   profile: async () => http.post("auth/profile", {}),
   logout: async () => {
-    removeToken();
+    removeData();
   },
   profile: async () => http.post("auth/profile", {}),
 };

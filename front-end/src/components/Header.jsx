@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "./UserContext";
+import authApi from "../apis/auth";
 
 const Header = () => {
   const [search, setSearch] = useState("");
-  const [user, setUser] = useState(null);
-
+  const { user } = useContext(UserContext);
+  // useEffect(() => {
+  //   authApi.profile().then();
+  //   console.log("user data >> ", userData);
+  // }, [user]);
+  // console.log(user);
   const signOut = () => {
     // Add your sign out logic here
   };
@@ -54,7 +60,7 @@ const Header = () => {
             {user ? (
               <div className="pl-10 group">
                 <div className="hover:text-red-400">
-                  Xin chào, {user.displayName}
+                  Xin chào, {user.username}
                 </div>
                 <ul className="w-44 h-100 absolute bg-white shadow-md text-black rounded-md z-50 right-0 hidden group-hover:block">
                   <li className="pt-3 pl-3 hover:text-red-400">
@@ -72,7 +78,7 @@ const Header = () => {
                 </ul>
               </div>
             ) : (
-              <Link to="/default/sign-in" className="hover:text-red-400">
+              <Link to="/default/login" className="hover:text-red-400">
                 Đăng nhập
               </Link>
             )}
