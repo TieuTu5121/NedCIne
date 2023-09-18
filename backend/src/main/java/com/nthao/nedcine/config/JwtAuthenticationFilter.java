@@ -1,5 +1,6 @@
 package com.nthao.nedcine.config;
 
+import com.nthao.nedcine.dto.auth.UserPrincipal;
 import com.nthao.nedcine.entity.UserEntity;
 import com.nthao.nedcine.repository.UserRepository;
 import com.nthao.nedcine.service.impl.JwtServiceImpl;

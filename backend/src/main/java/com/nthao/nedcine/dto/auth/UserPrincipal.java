@@ -1,5 +1,6 @@
 package com.nthao.nedcine.dto.auth;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,6 +10,7 @@ import java.util.Map;
 
 @Setter
 @Getter
+@AllArgsConstructor
 public class UserPrincipal {
     private static final long serialVersionUID = 1L;
 
@@ -22,4 +24,5 @@ public class UserPrincipal {
     private boolean accountNonLocked = true;
     private boolean credentialsNonExpired = true;
     private boolean enabled = true;
+
 }

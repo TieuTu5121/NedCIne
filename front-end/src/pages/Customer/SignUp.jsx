@@ -27,6 +27,7 @@ export default function SignUp() {
       } else {
         // Xử lý khi đăng nhập thất bại
         toast.error("Đăng ký thất bại!!!");
+        ư;
       }
     } catch (error) {
       console.error("Register error:", error);

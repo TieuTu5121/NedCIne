@@ -2,12 +2,25 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { getToken, removeData, setData } from "../configs/authentication";
+import authApi from "../apis/auth";
 
 const Header = () => {
   const [search, setSearch] = useState("");
   const { user, setUser } = useContext(UserContext);
 
   const navigate = useNavigate();
+  // useEffect(() => {
+  //   // Kiểm tra xem token đã tồn tại trong localStorage hay chưa
+  //   const token = localStorage.getItem("token");
+  //   console.log("Set user in header");
+  //   if (token && !user) {
+  //     // Nếu tồn tại token và user chưa được thiết lập, thực hiện gọi API
+  //     authApi.profile().then(({ data }) => {
+  //       setUser(data?.data);
+  //       // console.log(data);
+  //     });
+  //   }
+  // });
 
   const signOut = () => {
     removeData();

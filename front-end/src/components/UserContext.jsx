@@ -15,6 +15,10 @@ export function UserContextProvider({ children }) {
       // Nếu tồn tại token và user chưa được thiết lập, thực hiện gọi API
       authApi.profile().then(({ data }) => {
         setUser(data?.data);
+
+        console.log(data?.data);
+        // console.log(" set User in context>>> ", user);
+
         setReady(true);
       });
     } else {

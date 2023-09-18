@@ -23,13 +23,17 @@ function SignIn() {
 
       const response = await authApi.login(email, password);
 
-      if (response?.data?.codeStatus === 200) {
+      if (response?.data.codeStatus === 200 && !response?.data?.data.message) {
         setUser(response?.data.data.user);
-
         navigate("/default");
-        toast.success("Đăng nhập thành công!!!");
+        console.log(response);
+        // toast.success("Đăng nhập thành công!!!");
       } else {
-        toast.error("Đăng nhập thất bại!");
+        response?.data?.data.message
+          ? toast.error(response?.data?.data.message + "!")
+          : toast.error("Đăng nhập thất bại!!");
+
+        // console.log(response?.data?.data.message);
       }
     } catch (error) {
       console.error("Login error:", error);
