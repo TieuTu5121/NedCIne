@@ -1,47 +1,53 @@
 import React, { useState, useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AdminSidebar from "../../components/AdminSidebar";
-
+import { nonAccentVietnamese } from "../../composables/nonAccentVietnamese";
+import cinemaApi from "../../apis/cinemaApi";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-hot-toast";
 const CinemaManagement = () => {
-  //   const [cinemas, setCinemas] = useState([]);
-  //   const [searchQuery, setSearchQuery] = useState('');
-  //   const { toLowerCaseNonAccentVietnamese } = nonAccentVietnamese(); // Đảm bảo bạn đã import hàm này
+  const [cinemas, setCinemas] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const { toLowerCaseNonAccentVietnamese } = nonAccentVietnamese(); // Đảm bảo bạn đã import hàm này
+  const history = useNavigate();
+  let toLowerCase =
+    nonAccentVietnamese().toLowerCaseNonAccentVietnamese(searchQuery);
+  useEffect(() => {
+    cinemaApi.getAllCinemas().then((data) => {
+      const allCinemas = data.data.data;
+      setCinemas(data.data.data);
+    });
+  }, []);
 
-  //   useEffect(() => {
-  //     fetch('http://localhost:3000/api/movies/cinema')
-  //       .then((response) => response.json())
-  //       .then((data) => setCinemas(data));
-  //   }, []);
+  const deleteMovie = async (cinemaId) => {
+    if (window.confirm("Bạn có chắc muốn xóa rạp chiếu  này?")) {
+      try {
+        await cinemaApi.deleteCinema(cinemaId);
+        const updatedCinemas = cinemas.filter(
+          (cinema) => cinema.id !== cinemaId
+        );
+        setCinemas(updatedCinemas);
+        toast.success("Xóa rạp chiếu thành công!!!");
+      } catch (error) {
+        console.error("Lỗi khi xóa rạp: ", error);
+        toast.error("Lỗi khi xóa rạp!!!");
+      }
+    }
+  };
 
-  //   const deleteCinema = async (cinemaId, index) => {
-  //     if (window.confirm('Bạn có chắc muốn xóa rạp chiếu phim này?')) {
-  //       try {
-  //         const response = await fetch(`http://localhost:3000/api/movies/cinema/${cinemaId}`, {
-  //           method: 'DELETE',
-  //           headers: { 'Content-Type': 'application/json' },
-  //         });
-
-  //         if (response.status === 200) {
-  //           const updatedCinemas = [...cinemas];
-  //           updatedCinemas.splice(index, 1);
-  //           setCinemas(updatedCinemas);
-  //         }
-  //       } catch (error) {
-  //         console.error('Lỗi khi xóa rạp chiếu phim: ', error);
-  //       }
-  //     }
-  //   };
-
-  //   const resultQuery = () => {
-  //     if (searchQuery) {
-  //       return cinemas.filter((cinema) =>
-  //         toLowerCaseNonAccentVietnamese(cinema.Name).includes(searchQuery)
-  //       );
-  //     } else {
-  //       return cinemas;
-  //     }
-  //   };
+  function resultQuery() {
+    if (searchQuery) {
+      return cinemas.filter((cinema) =>
+        nonAccentVietnamese()
+          .toLowerCaseNonAccentVietnamese(cinema.name)
+          .includes(toLowerCase)
+      );
+    } else {
+      return cinemas;
+    }
+  }
 
   return (
     <div className="grid grid-cols-6">
@@ -64,52 +70,71 @@ const CinemaManagement = () => {
               className="w-1/2 h-10 border border-gray-600 rounded-md focus:outline-none px-2"
               placeholder="Nhập tên rạp để tìm kiếm"
               type="text"
-              //   value={searchQuery}
-              //   onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <i className="fa-solid fa-magnifying-glass absolute right-1/2 top-1/2 -translate-y-1/2 pr-2"></i>
           </div>
           <div className="relative">
             <table className="w-full text-left">
-              <thead className="font-bold text-gray-700 uppercase bg-gray-50">
+              <thead className="font-bold text-gray-700 uppercase bg-gray-200 rounded ">
                 <tr>
-                  <th className="py-3 px-6">ID</th>
                   <th className="py-3 px-6">Tên rạp chiếu phim</th>
-                  <th></th>
-                  <th className="py-3 px-6">Số phòng</th>
+                  <th className="py-3 px-6">Địa chỉ</th>
+                  <th className="py-3 px-6">Thành Phố</th>
+                  <th className="py-3 px-6">Danh sách phòng</th>
+                  <th className="py-3 px-6"></th>
+
                   <th className="py-3 px-6"></th>
                 </tr>
               </thead>
               <tbody>
-                {/* {resultQuery().map((cinema, index) => (
-                  <tr key={cinema._id} className="bg-white border-b">
-                    <td className="py-4 px-6">{cinema._id}</td>
-                    <td
-                      colSpan="2"
-                      className="py-4 px-6 font-bold text-gray-900 whitespace-nowrap"
+                {cinemas.length !== 0 &&
+                  resultQuery().map((cinema, index) => (
+                    <tr
+                      key={index}
+                      className="bg-white border-b hover:bg-slate-300"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        history(`/admin/cinema/${cinema.id}/room-management/`);
+                      }}
                     >
-                      {cinema.Name}
-                    </td>
-                    <td className="py-4 px-6">{cinema.Seats}</td>
-                    <td className="py-4 px-6">
-                      <a
-                        href={`/edit-cinema/${cinema._id}`} // Điều hướng đến trang chỉnh sửa rạp phim
-                      >
-                        <i className="fa-solid fa-pen-to-square text-xl text-blue-500 pr-8"></i>
-                      </a>
-                      <a
-                        href="#"
-                        className="cursor-pointer"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          deleteCinema(cinema._id, index);
-                        }}
-                      >
-                        <i className="fa-solid fa-trash-can text-xl text-red-400"></i>
-                      </a>
-                    </td>
-                  </tr>
-                ))} */}
+                      <td className="py-4 px-6 font-bold text-gray-900 whitespace-nowrap">
+                        {cinema.name}
+                      </td>
+                      <td className="py-4 px-6">{cinema.address}</td>
+                      <td className="py-4 px-6">{cinema.city}</td>
+
+                      <td colSpan={2} className="py-4 px-6">
+                        {}
+                      </td>
+
+                      <td className="py-4 px-6">
+                        <Link
+                          className="pr-4"
+                          to={`/admin/cinema-management/edit/${cinema.id}`}
+                        >
+                          <FontAwesomeIcon
+                            icon={faPenToSquare}
+                            className=" text-xl text-blue-500"
+                          />
+                        </Link>
+                        <Link
+                          to="#"
+                          className="cursor-pointer pr-4 "
+                          onClick={(e) => {
+                            e.preventDefault();
+                            deleteMovie(cinema.id);
+                          }}
+                        >
+                          <FontAwesomeIcon
+                            icon={faTrash}
+                            className="text-xl text-red-400"
+                          />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

@@ -7,18 +7,18 @@ export function AdminLayout() {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const role = localStorage.getItem("role");
-    if (role !== "ADMIN") {
-      console.log(role);
-      navigate("/default");
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   const role = localStorage.getItem("role");
+  //   if (role !== "ADMIN") {
+  //     console.log(role);
+  //     navigate("/default");
+  //   }
+  // }, [user]);
 
   return (
     <>
       <Suspense fallback={<div>Loading...</div>}>
-        <Outlet />
+        <Outlet className="h-auto" />
       </Suspense>
     </>
   );

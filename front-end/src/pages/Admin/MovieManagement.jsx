@@ -1,54 +1,51 @@
 import React, { useState, useEffect, Suspense } from "react";
 import AdminSidebar from "../../components/AdminSidebar";
 import { Link } from "react-router-dom";
-// import { toLowerCaseNonAccentVietnamese } from "@/composables/nonAccentVietnamese";
+import movieApi from "../../apis/movie";
+import { nonAccentVietnamese } from "../../composables/nonAccentVietnamese.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-hot-toast";
 
 const MovieManagement = () => {
   const [movies, setMovies] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(null);
-  const [msg, setMsg] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  let toLowerCase =
+    nonAccentVietnamese().toLowerCaseNonAccentVietnamese(searchQuery);
   document.title = "NedCine - Quản lí phim";
 
-  // useEffect(() => {
-  //   fetch("http://localhost:3000/api/movies")
-  //     .then((response) => response.json())
-  //     .then((data) => setMovies(data));
-  // }, []);
+  useEffect(() => {
+    movieApi.getAllMovies().then(({ data }) => {
+      setMovies(data.data);
+    });
+  }, []);
 
-  const deleteMovie = async (movieId, index) => {
+  const deleteMovie = async (movieId) => {
     if (window.confirm("Bạn có chắc muốn xóa phim này?")) {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/movies/${movieId}`,
-          {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        if (response.status === 200) {
-          const updatedMovies = [...movies];
-          updatedMovies.splice(index, 1);
-          setMovies(updatedMovies);
-          setMsg("Xóa phim thành công");
-        } else {
-          setMsg("Xóa phim không thành công");
-        }
+        await movieApi.deleteMovie(movieId);
+        const updatedMovies = movies.filter((movie) => movie.id !== movieId);
+        setMovies(updatedMovies);
+        toast.success("Xóa phim thành công!!!");
       } catch (error) {
         console.error("Lỗi khi xóa phim: ", error);
-        setMsg("Có lỗi xảy ra khi xóa phim");
+        toast.error("Lỗi khi xóa phim!!!");
       }
     }
   };
 
-  const resultQuery = () => {
+  function resultQuery() {
     if (searchQuery) {
       return movies.filter((movie) =>
-        toLowerCaseNonAccentVietnamese(movie.Title).includes(searchQuery)
+        nonAccentVietnamese()
+          .toLowerCaseNonAccentVietnamese(movie.title)
+          .includes(toLowerCase)
       );
     } else {
       return movies;
     }
-  };
+  }
 
   return (
     <>
@@ -69,9 +66,7 @@ const MovieManagement = () => {
                 Thêm phim mới +
               </Link>
             </div>
-            {/* {msg && (
-              <div className="text-bold text-left text-red-500">{msg}</div>
-            )} */}
+
             <div className="mb-2 relative">
               <input
                 className="w-1/2 h-10 border border-gray-600 rounded-md focus:outline-none px-2"
@@ -84,49 +79,63 @@ const MovieManagement = () => {
             </div>
             <div className="relative">
               <table className="w-full text-left">
-                <thead className="font-bold text-gray-700 uppercase bg-gray-50">
+                <thead className="font-bold text-gray-700 uppercase bg-gray-200">
                   <tr>
-                    <th className="py-3 px-6">ID</th>
                     <th className="py-3 px-6">Tên phim</th>
                     <th></th>
-                    <th className="py-3 px-6">Poster</th>
+                    <th className="py-3 px-6 ">Poster</th>
+                    <th className="py-3 px-6">Trạng thái</th>
                     <th className="py-3 px-6"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* {resultQuery().map((movie, index) => (
-                    <tr key={movie._id} className="bg-white border-b">
-                      <td className="py-4 px-6">{movie._id}</td>
-                      <td
-                        colSpan="2"
-                        className="py-4 px-6 font-bold text-gray-900 whitespace-nowrap"
-                      >
-                        {movie.Title}
-                      </td>
-                      <td className="py-4 px-6">
-                        <img
-                          className="w-20"
-                          src={movie.Poster}
-                          alt={movie.Title}
-                        />
-                      </td>
-                      <td className="py-4 px-6">
-                        <a href={`/movie-management/edit/${movie._id}`}>
-                          <i className="fa-solid fa-pen-to-square text-xl text-blue-500 pr-8"></i>
-                        </a>
-                        <a
-                          href="#"
-                          className="cursor-pointer"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            deleteMovie(movie._id, index);
-                          }}
+                  {movies.legth != 0 &&
+                    resultQuery().map((movies) => (
+                      <tr key={movies.id} className="bg-white border-b">
+                        <td
+                          colSpan="2"
+                          className="py-4 px-6 font-bold text-gray-900 whitespace-nowrap"
                         >
-                          <i className="fa-solid fa-trash-can text-xl text-red-400"></i>
-                        </a>
-                      </td>
-                    </tr>
-                  ))} */}
+                          {movies.title}
+                        </td>
+                        <td className="py-4 px-6">
+                          <img
+                            className="w-20"
+                            src={movies.poster}
+                            alt={movies.title}
+                          />
+                        </td>
+                        <td className="py-4 px-6 font-bold text-gray-900 whitespace-nowrap">
+                          {movies.status === "SHOWING"
+                            ? "Đang chiếu"
+                            : "Sắp chiếu"}
+                        </td>
+                        <td className="py-2 px-6 ">
+                          <Link
+                            className="pr-4"
+                            to={`/admin/movie-management/edit/${movies.id}`}
+                          >
+                            <FontAwesomeIcon
+                              icon={faPenToSquare}
+                              className=" text-xl text-blue-500"
+                            />
+                          </Link>
+                          <Link
+                            to="#"
+                            className="cursor-pointer "
+                            onClick={(e) => {
+                              e.preventDefault();
+                              deleteMovie(movies.id);
+                            }}
+                          >
+                            <FontAwesomeIcon
+                              icon={faTrash}
+                              className="text-xl text-red-400"
+                            />
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>

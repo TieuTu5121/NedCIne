@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import authApi from "../../apis/auth";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../../components/UserContext";
 export default function SignUp() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false); // Thêm biến loading
-
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const register = async (event) => {
@@ -20,8 +21,9 @@ export default function SignUp() {
       const response = await authApi.register(email, username, password);
       console.log(response?.data?.codeStatus);
       // Xử lý thành công
-      if (response?.data?.codeStatus === 200) {
+      if (response?.data?.codeStatus === 200 && response?.data?.data !== null) {
         // Xử lý logic sau khi đăng nhập thành công, ví dụ chuyển hướng trang
+        setUser(response?.data?.data);
         toast.success("Đăng ký thành công!!!");
         navigate("/default");
       } else {

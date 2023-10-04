@@ -9,18 +9,6 @@ const Header = () => {
   const { user, setUser } = useContext(UserContext);
 
   const navigate = useNavigate();
-  // useEffect(() => {
-  //   // Kiểm tra xem token đã tồn tại trong localStorage hay chưa
-  //   const token = localStorage.getItem("token");
-  //   console.log("Set user in header");
-  //   if (token && !user) {
-  //     // Nếu tồn tại token và user chưa được thiết lập, thực hiện gọi API
-  //     authApi.profile().then(({ data }) => {
-  //       setUser(data?.data);
-  //       // console.log(data);
-  //     });
-  //   }
-  // });
 
   const signOut = () => {
     removeData();
@@ -30,7 +18,7 @@ const Header = () => {
   };
 
   return (
-    <header id="header" className=" h-14 bg-black fixed top-0 left-0 right-0 ">
+    <header id="header" className=" h-14 bg-black top-0 left-0 right-0 ">
       <nav className="w-full flex items-center justify-between h-full mx-auto px-4 ">
         <ul className="flex items-center justify-between text-xl h-full text-white font-semibold flex-grow-2">
           <li className="mr-12">

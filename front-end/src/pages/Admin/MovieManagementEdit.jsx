@@ -1,84 +1,99 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 import AdminSidebar from "../../components/AdminSidebar";
+import movieApi from "../../apis/movie";
+import { toast } from "react-hot-toast";
 
 function MovieManagementEdit() {
-  //   const { id } = useParams();
+  const { id } = useParams("");
   const history = useNavigate();
   const location = useLocation();
 
-  //   const [movie, setMovie] = useState({});
-  //   const [cinemas, setCinemas] = useState([]);
-  //   const [showCinema, setShowCinema] = useState(false);
-  //   const [showShowTime, setShowShowTime] = useState(false);
-  //   const [cinemaSelected, setCinemaSelected] = useState([]);
-  //   const [showTimeSelected, setShowTimeSelected] = useState([]);
-  //   const [msg, setMsg] = useState(null);
-  //   const [isPending, setIsPending] = useState(null);
+  const [movie, setMovie] = useState();
+  const [title, setTitle] = useState("");
+  const [year, setYear] = useState("");
+  const [rated, setRated] = useState("");
+  const [runTime, setRunTime] = useState("");
+  const [language, setLanguage] = useState("");
+  const [directors, setDirectors] = useState("");
+  const [actors, setActors] = useState("");
+  const [plot, setPlot] = useState("");
+  const [poster, setPoster] = useState("");
+  const [banner, setBanner] = useState("");
+  const [trailer, setTrailer] = useState("");
+  const [status, setStatus] = useState("SHOWING");
+  const [genres, setGenres] = useState();
+  const [release, setRelease] = useState("");
+  const [isPending, setIsPending] = useState(true);
 
-  //   useEffect(() => {
-  //     fetch(`http://localhost:3000/api/movies/${id}`)
-  //       .then((response) => response.json())
-  //       .then((data) => setMovie(data));
+  useEffect(() => {
+    if (id) {
+      movieApi.getMovieById(id).then(({ data }) => {
+        const movieData = data.data;
+        setMovie(movieData);
+        // console.log("movie data:  ", movieData);
+        // Cập nhật tất cả các biến state từ dữ liệu phim
+        setTitle(movieData.title);
+        setYear(movieData.year);
+        setRated(movieData.rated);
+        setRunTime(movieData.runTime);
+        setLanguage(movieData.language);
+        setDirectors(movieData.directors);
+        setActors(movieData.actors);
+        setPlot(movieData.plot);
+        setPoster(movieData.poster);
+        setBanner(movieData.banner);
+        setTrailer(movieData.trailer);
+        setStatus(movieData.status);
+        setGenres(movieData.genres);
+      });
+    }
+  }, [id]);
 
-  //     fetch(`http://localhost:3000/api/movies/cinema`)
-  //       .then((response) => response.json())
-  //       .then((data) => {
-  //         setCinemas(data);
-  //         bindingSelectedCinema();
-  //       });
-  //   }, [id]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsPending(true);
 
-  //   function bindingSelectedCinema() {
-  //     const selectedCinemas = [];
-  //     movie.Cinema.forEach((movieCinema) => {
-  //       cinemas.forEach((cinema) => {
-  //         if (movieCinema._id === cinema._id) {
-  //           selectedCinemas.push({ ...cinema, checked: true });
-  //         }
-  //       });
-  //     });
-  //     setCinemaSelected(selectedCinemas);
-  //   }
+    const movieData = {
+      title,
+      year,
+      rated,
+      runTime,
+      language,
+      directors,
+      actors,
+      plot,
+      poster,
+      banner,
+      trailer,
+      status,
+      genres,
+    };
+    console.log("movie:  ", movieData);
+    try {
+      if (id) {
+        // Nếu có id, thực hiện cập nhật
+        await movieApi.updateMovie(id, movieData).then(() => {
+          toast.success("Cập nhật thông tin phim thành công!!!");
+          history(-1);
+        });
+      } else {
+        // Nếu không có id, thực hiện tạo mới
+        await movieApi.createMovie(movieData);
+        history(-1);
 
-  //   function handleShowCinemaDropdown() {
-  //     setShowCinema(!showCinema);
-  //   }
+        toast.success("Tạo phim mới thành công!!!");
+      }
+    } catch (error) {
+      toast.error("Có lỗi xảy ra!!!");
+    } finally {
+      setIsPending(false);
+    }
+  };
 
-  //   function handleShowTimeDropdown() {
-  //     setShowShowTime(!showShowTime);
-  //   }
-
-  //   async function onSubmit(e) {
-  //     e.preventDefault();
-  //     setIsPending(true);
-  //     movie.Cinema = [...cinemaSelected];
-
-  //     try {
-  //       const response = await fetch(
-  //         `http://localhost:3000/api/movies/${movie._id}`,
-  //         {
-  //           method: "PUT",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify({ ...movie }),
-  //         }
-  //       );
-
-  //       const data = await response.json();
-  //       console.log(data);
-  //       setMsg("Cập nhật thông tin phim thành công");
-  //     } catch (error) {
-  //       setMsg(error.message);
-  //     } finally {
-  //       setIsPending(false);
-  //     }
-  //   }
   const handleGoBack = (e) => {
     e.preventDefault();
-    console.log(location.state);
     history(-1); // This will navigate back to the previous page
   };
   return (
@@ -90,8 +105,8 @@ function MovieManagementEdit() {
         <div className="col-span-5">
           <div className="container p-10 relative">
             <h1 className="font-bold text-xl mb-5">Chỉnh sửa thông tin phim</h1>
-            <form action="" className="w-full relative" onSubmit={onended}>
-              <div className="form-group mb-6">
+            <form action="" className="w-full relative" onSubmit={handleSubmit}>
+              <div className="form-group mb-6 hidden">
                 <label
                   className="form-label inline-block mb-2 text-gray-700 font-bold"
                   htmlFor="id"
@@ -101,7 +116,7 @@ function MovieManagementEdit() {
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none cursor-no-drop"
                   type="text"
-                  v-model="movie._id"
+                  defaultValue={movie ? movie.id : ""}
                   id="id"
                   disabled
                 />
@@ -116,7 +131,8 @@ function MovieManagementEdit() {
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   type="text"
-                  v-model="movie.Title"
+                  defaultValue={movie ? movie.title : ""}
+                  onChange={(e) => setTitle(e.target.value)}
                   id="title"
                 />
               </div>
@@ -130,7 +146,8 @@ function MovieManagementEdit() {
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   type="text"
-                  v-model="movie.Year"
+                  defaultValue={movie ? movie.year : ""}
+                  onChange={(e) => setYear(e.target.value)}
                   id="year"
                 />
               </div>
@@ -144,22 +161,24 @@ function MovieManagementEdit() {
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   type="text"
-                  v-model="movie.Rated"
+                  defaultValue={movie ? movie.rated : ""}
+                  onChange={(e) => setRated(e.target.value)}
                   id="rated"
                 />
               </div>
               <div className="form-group mb-6">
                 <label
                   className="form-label inline-block mb-2 text-gray-700 font-bold"
-                  htmlFor="released"
+                  htmlFor="release"
                 >
                   Ngày, tháng ra mắt
                 </label>
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   type="text"
-                  v-model="movie.Released"
-                  id="released"
+                  defaultValue={movie ? movie.release : ""}
+                  onChange={(e) => setRelease(e.target.value)}
+                  id="release"
                 />
               </div>
               <div className="form-group mb-6">
@@ -172,7 +191,8 @@ function MovieManagementEdit() {
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   type="text"
-                  v-model="movie.Runtime"
+                  defaultValue={movie ? movie.runTime : ""}
+                  onChange={(e) => setRunTime(e.target.value)}
                   id="runtime"
                 />
               </div>
@@ -186,7 +206,8 @@ function MovieManagementEdit() {
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   type="text"
-                  v-model="movie.Genres"
+                  defaultValue={movie ? movie.genres : ""}
+                  onChange={(e) => setGenres(e.target.value)}
                   id="genres"
                 />
               </div>
@@ -200,7 +221,8 @@ function MovieManagementEdit() {
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   type="text"
-                  v-model="movie.Directors"
+                  defaultValue={movie ? movie.directors : ""}
+                  onChange={(e) => setDirectors(e.target.value)}
                   id="directors"
                 />
               </div>
@@ -214,7 +236,8 @@ function MovieManagementEdit() {
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   type="text"
-                  v-model="movie.Actors"
+                  defaultValue={movie ? movie.actors : ""}
+                  onChange={(e) => setActors(e.target.value)}
                   id="actors"
                 />
               </div>
@@ -229,22 +252,24 @@ function MovieManagementEdit() {
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   rows="5"
                   type="text"
-                  v-model="movie.Plot"
+                  defaultValue={movie ? movie.plot : ""}
+                  onChange={(e) => setPlot(e.target.value)}
                   id="plot"
                 ></textarea>
               </div>
               <div className="form-group mb-6">
                 <label
                   className="form-label inline-block mb-2 text-gray-700 font-bold"
-                  htmlFor="languages"
+                  htmlFor="language"
                 >
                   Ngôn ngữ
                 </label>
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   type="text"
-                  v-model="movie.Language"
-                  id="languages"
+                  defaultValue={movie ? movie.language : ""}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  id="language"
                 />
               </div>
               <div className="form-group mb-6">
@@ -257,7 +282,8 @@ function MovieManagementEdit() {
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   type="text"
-                  v-model="movie.Poster"
+                  defaultValue={movie ? movie.poster : ""}
+                  onChange={(e) => setPoster(e.target.value)}
                   id="poster"
                 />
               </div>
@@ -271,7 +297,10 @@ function MovieManagementEdit() {
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   type="text"
-                  v-model="movie.Banner"
+                  defaultValue={
+                    movie && movie.banner != null ? movie.banner : ""
+                  }
+                  onChange={(e) => setBanner(e.target.value)}
                   id="banner"
                 />
               </div>
@@ -285,7 +314,10 @@ function MovieManagementEdit() {
                 <input
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   type="text"
-                  v-model="movie.Trailer"
+                  defaultValue={
+                    movie && movie.trailer != null ? movie.trailer : ""
+                  }
+                  onChange={(e) => setTrailer(e.target.value)}
                   id="trailer"
                 />
               </div>
@@ -298,100 +330,18 @@ function MovieManagementEdit() {
                 </label>
                 <select
                   className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  v-model="movie.Status"
+                  defaultValue={movie ? movie.status : "SHOWING"}
+                  onChange={(e) => setStatus(e.target.value)}
                   id="status"
                 >
-                  <option value="Đang chiếu">Đang chiếu</option>
-                  <option value="Sắp chiếu">Sắp chiếu</option>
+                  <option value="SHOWING">Đang chiếu</option>
+                  <option value="COMING">Sắp chiếu</option>
                 </select>
               </div>
-              <div className="form-group mb-6">
-                <label
-                  className="form-label inline-block mb-2 text-gray-700 font-bold"
-                  htmlFor="cinema"
-                >
-                  Chiếu tại rạp
-                </label>
-
-                <input
-                  className="form-control block w-full px-3 py-1.5 text-left font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
-                  value="Chọn các rạp"
-                  type="button"
-                />
-                <div
-                  className="p-2 border border-gray-500 rounded-sm shadow-sm"
-                  v-if="showCinema"
-                >
-                  <ul>
-                    <li v- htmlFor="cinema in cinemas">
-                      <input type="checkbox" />
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div className="form-group mb-6">
-                <label
-                  className="form-label inline-block mb-2 text-gray-700 font-bold"
-                  htmlFor="cinema"
-                >
-                  Thời gian chiếu
-                </label>
-
-                <input
-                  className="form-control block w-full px-3 py-1.5 text-left font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
-                  value="Chọn thời gian chiếu"
-                  type="button"
-                />
-                <div
-                  className="p-2 border border-gray-500 rounded-sm shadow-sm"
-                  v-if="showShowTime"
-                >
-                  <ul>
-                    <li v- htmlFor="(cinema, index) in cinemaSelected">
-                      <div
-                        v-
-                        htmlFor="(showtime, indexShowTime) in cinema.ShowTimes"
-                      >
-                        <input
-                          type="checkbox"
-                          //   :id="showtime.Date + showtime.Time"
-                          //   :value="showtime.Date + ' ' + showtime.Time"
-                          //   v-if="
-                          //     showtime.MovieId == movie._id ||
-                          //     showtime.MovieId == null
-                          //   "
-                          //   v-model="showTimeSelected"
-                          //   :checked="
-                          //     showtime.MovieId == movie._id ? 'checked' : null
-                          //   "
-                        />
-                        {/* <label
-                      v-if="
-                        showtime.MovieId == movie._id ||
-                        showtime.MovieId == null
-                      "
-                      : htmlFor="showtime.Date + showtime.Time"
-                      >{{
-                        showtime.Date +
-                        " - " +
-                        showtime.Time +
-                        " - " +
-                        cinema.Name
-                      }}
-                      </label> */}
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              {/* 
-                <div className="text-red-400 font-semibold" >
-                    {{ msg }}
-                </div> */}
 
               <div className="relative py-8">
                 <button
-                  v-if="!isPending"
+                  hidden={!isPending}
                   type="submit"
                   className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
                 >
@@ -400,6 +350,7 @@ function MovieManagementEdit() {
                 <button
                   className="bg-gray-500 text-white px-4 py-2 rounded-md mr-2 cursor-not-allowed"
                   disabled
+                  hidden={isPending}
                 >
                   Đang Lưu ...
                 </button>

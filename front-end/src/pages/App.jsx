@@ -11,12 +11,18 @@ import MovieManagement from "./Admin/MovieManagement";
 import MovieManagementEdit from "./Admin/MovieManagementEdit";
 import CinemaManagement from "./Admin/CinemaManagement";
 import CinemaManagementAdd from "./Admin/CinemaManagementAdd";
+import CinemaManagementEdit from "./Admin/CinemaManagementEdit";
 import NotFound from "./error/NotFound";
 import ProductManagement from "./Admin/ProductManagement";
+
 import ShowtimeManagement from "./Admin/ShowtimeManagement";
 import EmployeeManagement from "./Admin/EmployeeManagement";
 import OrderManagement from "./Admin/OrderManagement";
 import { UserContextProvider } from "../components/UserContext";
+import MovieDetail from "./Customer/MovieDetail";
+import ProductManagementEdit from "./Admin/ProductManagementEdit";
+import RoomManagement from "./Admin/RoomManagement";
+import RoomManagementEdit from "./Admin/RoomManagementEdit";
 
 function App() {
   return (
@@ -35,7 +41,7 @@ function App() {
               path="/default/coming"
               element={<MovieSchedule movieStatus="Sắp chiếu" />}
             />
-            {/* <Route path="/site" */}
+            <Route path="/default/movies/:id" element={<MovieDetail />} />
           </Route>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminIndex />} />
@@ -48,6 +54,11 @@ function App() {
               element={<MovieManagementEdit />}
             />
             <Route
+              path="/admin/movie-management/edit/:id"
+              element={<MovieManagementEdit />}
+            />
+
+            <Route
               path="/admin/cinema-management"
               element={<CinemaManagement />}
             />
@@ -56,8 +67,32 @@ function App() {
               element={<CinemaManagementAdd />}
             />
             <Route
+              path="/admin/cinema-management/edit/:id"
+              element={<CinemaManagementEdit />}
+            />
+            <Route
+              path="/admin/cinema/:id/room-management"
+              element={<RoomManagement />}
+            />
+            <Route
+              path="/admin/cinema/:id/room-management/edit/"
+              element={<RoomManagementEdit />}
+            />
+            <Route
+              path="/admin/cinema/:id/room-management/edit/:roomId"
+              element={<RoomManagementEdit />}
+            />
+            <Route
               path="/admin/product-management"
               element={<ProductManagement />}
+            />
+            <Route
+              path="/admin/product-management/edit"
+              element={<ProductManagementEdit />}
+            />
+            <Route
+              path="/admin/product-management/edit/:id"
+              element={<ProductManagementEdit />}
             />
             <Route
               path="/admin/employee-management"

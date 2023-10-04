@@ -34,13 +34,13 @@ public class SecurityConfig {
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
-    public UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService() {
         return username -> userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService());
         authenticationProvider.setPasswordEncoder(passwordEncoder());
@@ -56,6 +56,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -65,7 +66,13 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .requestMatchers(
                         new AntPathRequestMatcher("/api/v1/auth/login"),
-                        new AntPathRequestMatcher("/api/v1/auth/register")
+                        new AntPathRequestMatcher("/api/v1/auth/register"),
+                        new AntPathRequestMatcher("/api/v1/movies/**"),
+                        new AntPathRequestMatcher("/api/v1/cinemas/**"),
+                        new AntPathRequestMatcher("/api/v1/products/**"),
+                        new AntPathRequestMatcher("/api/v1/rooms/**"),
+                        new AntPathRequestMatcher("/api/v1/showtimes/**")
+
                 )
                 .permitAll()
                 .anyRequest()

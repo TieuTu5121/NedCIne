@@ -77,7 +77,7 @@ function AdminSidebar({ dashboard }) {
         </li>
         <li
           className={`border-b-2 border-gray-300 cursor-pointer flex justify-between items-center ${
-            dashboard === "food" ? "bg-blue-600" : ""
+            dashboard === "product" ? "bg-blue-600" : ""
           }`}
         >
           <Link
@@ -117,17 +117,19 @@ function AdminSidebar({ dashboard }) {
           </Link>
           <i className="fa-solid fa-chevron-right right-4 absolute"></i>
         </li>
-        <li
-          className={`border-b-2 border-t-2 border-gray-300 cursor-pointer flex justify-between items-center flex-grow absolute bottom-0 w-full`}
-        >
-          <Link
-            className="block px-4 py-4 hover:bg-red-600 w-full"
-            // onClick={signOut}
+        <div className=" w-full">
+          <li
+            className={` border-b-2 border-t-2 border-gray-300 cursor-pointer flex justify-between absolute items-center flex-grow  bottom-0 w-full`}
           >
-            Đăng xuất
-          </Link>
-          <i className="fa-solid fa-right-from-bracket right-3 "></i>
-        </li>
+            <Link
+              className="block px-4 py-4 hover:bg-red-600 w-full "
+              // onClick={signOut}
+            >
+              Đăng xuất
+            </Link>
+            <i className="fa-solid fa-right-from-bracket right-3 "></i>
+          </li>
+        </div>
       </ul>
     </div>
   );

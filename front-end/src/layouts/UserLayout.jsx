@@ -7,12 +7,12 @@ export function UserLayout() {
   return (
     <>
       <Header />
-      <div className="max-w-7xl mx-auto my-12">
+      <div className="max-w-7xl mx-auto my-8 flex-shrink-0">
         <Suspense fallback={<div>Loading...</div>}>
           <Outlet />
         </Suspense>
       </div>
-      <Footer />
+      <Footer className="sticky bottom-0" />
     </>
   );
 }

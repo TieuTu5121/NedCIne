@@ -18,6 +18,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,8 @@ public class UserEntity implements UserDetails {
     private String username;
     private String password;
     private String email;
-
+    private String sex;
+    private Date birthday;
     @ElementCollection (targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated (EnumType.STRING)
     private Set<Role> roles;

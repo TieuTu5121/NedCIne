@@ -1,50 +1,41 @@
 import React, { useState, useEffect } from "react";
 import AdminSidebar from "../../components/AdminSidebar";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import cinemaApi from "../../apis/cinemaApi";
 
 const CinemaManagementAdd = () => {
-  //   const history = useHistory();
-  //   const [newCinema, setNewCinema] = useState({});
-  //   const [foods, setFoods] = useState([]);
-  //   const [show, setShow] = useState(false);
-  //   const [foodsSelected, setFoodsSelected] = useState([]);
-  //   const [msg, setMsg] = useState('');
-  //   const [isPending, setIsPending] = useState(false);
-
-  //   useEffect(() => {
-  //     fetch('http://localhost:3000/api/movies/cinema/foods')
-  //       .then((response) => response.json())
-  //       .then((data) => setFoods(data));
-  //   }, []);
-
-  //   const showDropdown = () => {
-  //     setShow(!show);
-  //   };
-
-  //   const handleSubmit = async (e) => {
-  //     e.preventDefault();
-  //     setIsPending(true);
-  //     newCinema.Foods = foodsSelected.map((food) => food._id);
-
-  //     try {
-  //       const response = await fetch('http://localhost:3000/api/movies/cinema', {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify(newCinema),
-  //       });
-
-  //       const data = await response.json();
-  //       console.log(data);
-  //       setMsg('Thêm mới rạp chiếu phim thành công');
-  //       history.goBack();
-  //     } catch (error) {
-  //       setMsg(error.message);
-  //     } finally {
-  //       setIsPending(false);
-  //     }
-  //   };
-
+  const [name, setName] = useState("");
+  const [city, setCity] = useState("");
+  const [address, setAddress] = useState("");
+  const [isPending, setIsPending] = useState(false);
+  const history = useNavigate();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (name === "") toast.error("Chưa nhập tên rạp chiếu!");
+    if (address === "") toast.error("Chưa nhập địa chỉ!");
+    const cinemaData = {
+      name,
+      address,
+      city,
+    };
+    try {
+      cinemaApi.createCinema(cinemaData).then(() => {
+        // console.log(response);
+        toast.success("Thêm rạp chiếu phim thành công!!!");
+        history(-1);
+      });
+    } catch (error) {
+      toast.error("Có lỗi đã xảy ra!!!");
+      console.log("error: ", error);
+    }
+  };
+  const handleGoBack = (e) => {
+    e.preventDefault();
+    history(-1); // This will navigate back to the previous page
+  };
   return (
-    <div className="grid grid-cols-6">
+    <div className="grid grid-cols-6 h-full">
       <div className="col-span-1 bg-slate-500 text-white h-full">
         <AdminSidebar dashboard="cinema" />
       </div>
@@ -52,10 +43,7 @@ const CinemaManagementAdd = () => {
         <div className="container p-10 relative">
           <h1 className="font-bold text-xl">Thêm rạp chiếu phim mới</h1>
 
-          <form
-            //   onSubmit={handleSubmit}
-            className="w-full relative"
-          >
+          <form onSubmit={handleSubmit} className="w-full relative">
             <div className="form-group mb-6">
               <label
                 className="form-label inline-block mb-2 text-gray-700 font-bold"
@@ -66,30 +54,26 @@ const CinemaManagementAdd = () => {
               <input
                 className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                 type="text"
-                // value={newCinema.Name}
-                // onChange={(e) =>
-                //   setNewCinema({ ...newCinema, Name: e.target.value })
-                // }
-                placeholder="Nhập rạp chiếu"
-                id="title"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Nhập tên rạp chiếu..."
+                id="name"
               />
             </div>
             <div className="form-group mb-6">
               <label
                 className="form-label inline-block mb-2 text-gray-700 font-bold"
-                htmlFor="seats"
+                htmlFor="address"
               >
-                Số ghế
+                Địa chỉ
               </label>
               <input
                 className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                 type="text"
-                // value={newCinema.Seats}
-                // onChange={(e) =>
-                //   setNewCinema({ ...newCinema, Seats: e.target.value })
-                // }
-                placeholder="Nhập số ghế ngồi"
-                id="seats"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Nhập địa chỉ rạp chiếu..."
+                id="address"
               />
             </div>
             <div className="form-group mb-6">
@@ -97,61 +81,32 @@ const CinemaManagementAdd = () => {
                 className="form-label inline-block mb-2 text-gray-700 font-bold"
                 htmlFor="foods"
               >
-                Đồ ăn
+                Thành phố
               </label>
 
-              <input
-                className="form-control block w-full px-3 py-1.5 text-left font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:outline-none"
-                value="Chọn đồ ăn"
-                type="button"
-                // onClick={showDropdown}
-              />
-              {/* <div
-                className="p-2 border border-gray-500 rounded-sm shadow-sm"
-                style={{ display: show ? "block" : "none" }}
+              <select
+                className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                id="city"
               >
-                <ul>
-                  {foods.map((food) => (
-                    <li key={food._id}>
-                      <input
-                        type="checkbox"
-                        id={food._id}
-                        value={food._id}
-                        onChange={(e) => {
-                          const selectedFood = foodsSelected.find(
-                            (f) => f._id === food._id
-                          );
-                          if (e.target.checked && !selectedFood) {
-                            setFoodsSelected([...foodsSelected, food]);
-                          } else if (!e.target.checked && selectedFood) {
-                            setFoodsSelected(
-                              foodsSelected.filter((f) => f._id !== food._id)
-                            );
-                          }
-                        }}
-                        checked={foodsSelected.some((f) => f._id === food._id)}
-                      />
-                      <label htmlFor={food._id}>{food.Name}</label>
-                    </li>
-                  ))}
-                </ul>
-              </div> */}
+                <option value="Ha noi">Hà Nội</option>
+                <option value="Kien giang">Kiên Giang</option>
+                <option value="Can tho">Cần Thơ</option>
+              </select>
             </div>
-
-            {/* <div className="text-red-400 font-semibold">{msg}</div> */}
 
             <div className="relative py-8">
               <button
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
-                // disabled={isPending}
+                disabled={isPending}
               >
-                Tạo
-                {/* {isPending ? "Đang Tạo ..." : "Tạo"} */}
+                {isPending ? "Đang Tạo ..." : "Tạo"}
               </button>
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded-md"
-                // onClick={() => history.goBack()}
+                onClick={handleGoBack}
               >
                 Hủy
               </button>
