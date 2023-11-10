@@ -8,15 +8,15 @@ import java.util.List;
 
 public interface SeatSettingService {
 
-    SeatSettingResponseDto getSeatSettingById(int id);
+    SeatSettingResponseDto getSeatSettingById(long id);
 
     List<SeatSettingResponseDto> getAllSeatSetting();
 
     SeatSettingResponseDto createSeatSetting(SeatSettingRequestDto seatSettingRequestDto);
 
-    SeatSettingResponseDto updateSeatSetting(int id, SeatSettingRequestDto seatSettingRequestDto);
+    SeatSettingResponseDto updateSeatSetting(long id, SeatSettingRequestDto seatSettingRequestDto);
 
-    void deleteSeatSetting(int id);
+    void deleteSeatSetting(long id);
 
-    List<SeatSettingResponseDto> getSeatSettingByShowTime(Showtime showtime);
+    List<SeatSettingResponseDto> getSeatSettingByShowTime(long showtime);
 }

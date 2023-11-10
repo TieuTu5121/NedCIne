@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "./UserContext";
 // import { useSignOut } from "@/composables/useSignOut";
 // import { projectAuth } from "@/configs/firebase";
 
 function AdminSidebar({ dashboard }) {
   //   const { signOut } = useSignOut();
+
   //   const [isAccess, setIsAccess] = useState(false);
   //   const [role, setRole] = useState("");
-  //   const [username, setUsername] = useState(projectAuth.currentUser.displayName);
+  const { user, setUser } = useContext(UserContext);
 
   //   useEffect(() => {
   //     const fetchRole = async () => {
@@ -26,14 +28,19 @@ function AdminSidebar({ dashboard }) {
 
   //     fetchRole();
   //   }, []);
-
+  useEffect(() => {
+    console.log("user: ", user);
+  }, []);
   return (
     <div className="fixed w-[254px] h-full relative">
       <Link to="/admin">
         <h1 className="text-2xl font-bold pt-8 pb-2 text-center">DASHBOARD</h1>
       </Link>
       <h3 className="text-center pb-6">
-        Xin chào, <span className="text-yellow-200">User Name</span>
+        Xin chào, {"  "}
+        <span className="text-yellow-200">
+          {user ? user.username : "User Name"}
+        </span>
       </h3>
       <ul className="flex flex-col ">
         <li

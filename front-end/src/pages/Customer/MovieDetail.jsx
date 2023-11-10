@@ -1,22 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import movieApi from "../../apis/movie";
-import { useState } from "react";
+import ChosingShowtimeModal from "../../components/ChoosingShowtimeModal";
+import { Button } from "@mui/material";
 
 const MovieDetail = () => {
   const [movieDetail, setMovieDetail] = useState({});
   const { id } = useParams("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
 
   useEffect(() => {
     movieApi.getMovieById(id).then(({ data }) => {
       setMovieDetail(data.data);
-      console.log(data.data);
     });
-    console.log("Status : ", movieDetail.status);
   }, [id]);
 
   return (
-    <div className="flex flex-col items-center justify-center pt-28">
+    <div className="flex flex-col items-center justify-center ">
       <h1 className="text-4xl text-dark uppercase font-semibold mb-6">
         Nội dung phim
       </h1>
@@ -61,24 +69,30 @@ const MovieDetail = () => {
           <p>
             <strong>Ngôn ngữ:</strong> {movieDetail.language}
           </p>
-          <p>
-            <strong>Rated:</strong> {movieDetail.rated}
+          <p className="pb-8">
+            <strong>Rated:</strong> <strong>{movieDetail.rated}</strong>
           </p>
           <button
             className={
               movieDetail.status === "SHOWING"
-                ? "uppercase bg-blue-600 text-white font-semibold px-32 py-2 rounded-lg mt-3 text-lg hover:bg-blue-500"
-                : "uppercase bg-gray-300 text-white font-semibold px-32 py-2 rounded-lg mt-3 text-lg cursor-not-allowed"
+                ? "uppercase bg-blue-600 text-white font-semibold px-16 py-2 rounded-lg mt-3 text-lg hover:bg-blue-500 pt-16"
+                : "uppercase bg-gray-300 text-white font-semibold px-32 py-2 rounded-lg mt-3 text-lg cursor-not-allowed pt-16"
             }
-            // onClick={() => {
-            //   router.push(`/booking-ticket/${movieDetail.id}`);
-            // }}
             hidden={movieDetail.status === "COMING"}
+            onClick={handleOpen}
           >
-            Mua Vé
+            Mua vé
           </button>
         </div>
       </div>
+
+      {isModalOpen && (
+        <ChosingShowtimeModal
+          movieId={id}
+          isOpen={isModalOpen}
+          onClose={handleClose}
+        />
+      )}
     </div>
   );
 };

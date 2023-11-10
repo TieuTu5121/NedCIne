@@ -43,13 +43,12 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto register(UserRegisterDto userCreateDto) {
 
         UserEntity newUser = userRepository.save(
-                UserEntity.builder()
+                new UserEntity().builder()
                         .username(userCreateDto.getUsername())
                         .email(userCreateDto.getEmail())
                         .password(passwordEncoder.encode(userCreateDto.getPassword()))
                         .roles(Collections.singleton(Role.USER))
-                        .build()
-        );
+                        .build());
         return userMapper(newUser);
     }
 

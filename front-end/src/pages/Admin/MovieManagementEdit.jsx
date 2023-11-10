@@ -40,6 +40,7 @@ function MovieManagementEdit() {
         setRunTime(movieData.runTime);
         setLanguage(movieData.language);
         setDirectors(movieData.directors);
+        setRelease(movieData.release);
         setActors(movieData.actors);
         setPlot(movieData.plot);
         setPoster(movieData.poster);
@@ -65,6 +66,7 @@ function MovieManagementEdit() {
       actors,
       plot,
       poster,
+      release,
       banner,
       trailer,
       status,

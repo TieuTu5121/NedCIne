@@ -7,13 +7,15 @@ import lombok.*;
 
 @Builder
 @Data
-
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class SeatSettingResponseDto {
-    private int id;
+    private long id;
     private Seat seat;
     private Showtime showtime;
     private String status;
+
 
 }

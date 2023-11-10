@@ -13,8 +13,9 @@ import java.util.Date;
 public class ShowtimeRequestDto {
     private Movie movie;
     private Room room;
-    private Time showtime;
-    private Date showdate;
+    private String showtime;
+    private String finishTime;
+    private String showdate;
     private float price;
     private String state;
 

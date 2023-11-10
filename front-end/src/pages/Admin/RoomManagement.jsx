@@ -48,6 +48,7 @@ const RoomManagement = () => {
 
     const rooms = await fetchRoomsByCinema(id);
     setRooms(rooms);
+    console.log(rooms);
     setLoadding(false);
   };
   const deleteRoom = async (roomid) => {

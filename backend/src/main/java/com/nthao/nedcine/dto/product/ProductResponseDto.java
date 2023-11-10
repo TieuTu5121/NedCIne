@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @Data
 public class ProductResponseDto {
-    private int id;
+    private long id;
     private String name;
     private String category;
     private String photo;

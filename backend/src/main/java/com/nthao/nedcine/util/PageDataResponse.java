@@ -12,6 +12,7 @@ public class PageDataResponse {
     private Long currentPage;
     private Long offsetPage;
     private Long pageSize;
+    private  Long totalPage;
     private String sortDirection;
 
 

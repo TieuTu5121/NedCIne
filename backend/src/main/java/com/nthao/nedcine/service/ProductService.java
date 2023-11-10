@@ -15,11 +15,11 @@ public interface ProductService {
 
     public List<ProductResponseDto> getAllProducts();
 
-    public ProductResponseDto getProductById(int id);
+    public ProductResponseDto getProductById(long id);
 
     public ProductResponseDto createProduct(ProductRequestDto productRequestDto);
 
-    public ProductResponseDto updateProduct(int id,ProductRequestDto product);
+    public ProductResponseDto updateProduct(long id,ProductRequestDto product);
 
-    public void deleteProduct(int id) ;
+    public void deleteProduct(long id) ;
 }

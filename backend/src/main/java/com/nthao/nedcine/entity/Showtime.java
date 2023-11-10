@@ -26,8 +26,9 @@ public class Showtime {
     @JoinColumn (name = "room")
     private Room room;
     @Column (columnDefinition = "time")
-    private Time startTime;
-    private Date showDate;
+    private String startTime;
+    private String finishTime;
+    private String showDate;
     private String state;
     @Column (columnDefinition = "float")
     private Float price;

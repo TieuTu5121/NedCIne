@@ -16,7 +16,7 @@ export function UserContextProvider({ children }) {
       authApi.profile().then(({ data }) => {
         setUser(data?.data);
 
-        console.log(data?.data);
+        // console.log(data?.data);
         // console.log(" set User in context>>> ", user);
 
         setReady(true);

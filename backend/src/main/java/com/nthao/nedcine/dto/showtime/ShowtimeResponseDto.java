@@ -19,8 +19,9 @@ public class ShowtimeResponseDto {
     private int id;
     private Movie movie;
     private Room room;
-    private Date showdate;
-    private Time showtime;
+    private String showdate;
+    private String finishTime;
+    private String showtime;
     private String state;
     private Float price;
 }

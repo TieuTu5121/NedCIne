@@ -8,10 +8,12 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface SeatSettingRepository extends JpaRepository<SeatSetting, Integer> {
-    @Query("SELECT seat_settings FROM SeatSetting seat_settings WHERE seat_settings.seat IN :seats")
-    List<SeatSetting> findAllBySeat( List<Seat> seats);
+public interface SeatSettingRepository extends JpaRepository<SeatSetting, Long> {
+    @Query ("SELECT seat_settings FROM SeatSetting seat_settings WHERE seat_settings.seatId IN :seats")
+    List<SeatSetting> findAllBySeat(List<Long> seats);
 
-
-    List<SeatSetting> findByShowtime(Showtime showtime);
+    @Query("select  seatStting from  SeatSetting seatStting where seatStting.id = :id")
+    SeatSetting getById(Long id);
+@Query("select st from SeatSetting st where st.showtimeId = :showtimeId order by st.id")
+    List<SeatSetting> findByShowtimeId(long showtimeId);
 }

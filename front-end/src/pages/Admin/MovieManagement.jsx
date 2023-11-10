@@ -84,7 +84,11 @@ const MovieManagement = () => {
                     <th className="py-3 px-6">Tên phim</th>
                     <th></th>
                     <th className="py-3 px-6 ">Poster</th>
+                    <th className="py-3 px-6 ">Thể loại</th>
+
+                    <th className="py-3 px-6">Ngày chiếu</th>
                     <th className="py-3 px-6">Trạng thái</th>
+
                     <th className="py-3 px-6"></th>
                   </tr>
                 </thead>
@@ -104,6 +108,12 @@ const MovieManagement = () => {
                             src={movies.poster}
                             alt={movies.title}
                           />
+                        </td>
+                        <td className="py-4 px-6 font-bold text-gray-900 whitespace-nowrap">
+                          {movies.genres}
+                        </td>
+                        <td className="py-4 px-6 font-bold text-gray-900 whitespace-nowrap">
+                          {movies.release}
                         </td>
                         <td className="py-4 px-6 font-bold text-gray-900 whitespace-nowrap">
                           {movies.status === "SHOWING"

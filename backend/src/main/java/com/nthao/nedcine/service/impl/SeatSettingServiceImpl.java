@@ -6,6 +6,7 @@ import com.nthao.nedcine.entity.SeatSetting;
 import com.nthao.nedcine.entity.Showtime;
 import com.nthao.nedcine.repository.SeatRepository;
 import com.nthao.nedcine.repository.SeatSettingRepository;
+import com.nthao.nedcine.repository.ShowtimeRepository;
 import com.nthao.nedcine.service.SeatSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,10 @@ public class SeatSettingServiceImpl implements SeatSettingService {
 
     @Autowired
     private SeatSettingRepository seatSettingRepository;
-
+   @Autowired SeatRepository seatRepository;
+    @Autowired ShowtimeRepository showtimeRepository;
     @Override
-    public SeatSettingResponseDto getSeatSettingById(int id) {
+    public SeatSettingResponseDto getSeatSettingById(long id) {
         SeatSetting seatSetting = seatSettingRepository.findById(id).orElse(null);
         if (seatSetting != null) {
             return seatSettingMapper(seatSetting);
@@ -43,19 +45,19 @@ public class SeatSettingServiceImpl implements SeatSettingService {
 
         SeatSetting newSeatSetting = seatSettingRepository.save(SeatSetting.builder()
                 .status(seatSettingRequestDto.getStatus())
-                .showtime(seatSettingRequestDto.getShowtime())
-                .seat(seatSettingRequestDto.getSeat())
+                .showtimeId(seatSettingRequestDto.getShowtime().getId())
+                .seatId(seatSettingRequestDto.getSeat().getId())
                 .build());
 
         return seatSettingMapper(newSeatSetting);
     }
 
     @Override
-    public SeatSettingResponseDto updateSeatSetting(int id, SeatSettingRequestDto seatSettingRequestDto) {
+    public SeatSettingResponseDto updateSeatSetting(long id, SeatSettingRequestDto seatSettingRequestDto) {
         SeatSetting seatSetting = seatSettingRepository.findById(id).orElse(null);
         if (seatSetting != null) {
-            seatSetting.setSeat(seatSettingRequestDto.getSeat());
-            seatSetting.setShowtime(seatSettingRequestDto.getShowtime());
+            seatSetting.setSeatId(seatSettingRequestDto.getSeat().getId());
+            seatSetting.setShowtimeId(seatSettingRequestDto.getShowtime().getId());
             seatSetting.setStatus(seatSettingRequestDto.getStatus());
             seatSettingRepository.save(seatSetting);
             return seatSettingMapper(seatSetting);
@@ -64,13 +66,13 @@ public class SeatSettingServiceImpl implements SeatSettingService {
     }
 
     @Override
-    public void deleteSeatSetting(int id) {
+    public void deleteSeatSetting(long id) {
         seatSettingRepository.deleteById(id);
     }
 
     @Override
-    public List<SeatSettingResponseDto> getSeatSettingByShowTime(Showtime showtime) {
-        List<SeatSetting> seatSettings = seatSettingRepository.findByShowtime(showtime);
+    public List<SeatSettingResponseDto> getSeatSettingByShowTime(long showtime) {
+        List<SeatSetting> seatSettings = seatSettingRepository.findByShowtimeId(showtime);
         List<SeatSettingResponseDto> seatSettingResponseDtos = new ArrayList<>();
         for (SeatSetting seatSetting : seatSettings) {
             seatSettingResponseDtos.add(seatSettingMapper(seatSetting));
@@ -81,8 +83,8 @@ public class SeatSettingServiceImpl implements SeatSettingService {
     private SeatSettingResponseDto seatSettingMapper(SeatSetting seatSetting) {
         return SeatSettingResponseDto.builder()
                 .id(seatSetting.getId())
-                .seat(seatSetting.getSeat())
-                .showtime(seatSetting.getShowtime())
+                .seat(seatRepository.findById((int)seatSetting.getSeatId()).get())
+                .showtime(showtimeRepository.findById((int)seatSetting.getShowtimeId()).get())
                 .status(seatSetting.getStatus())
                 .build();
     }

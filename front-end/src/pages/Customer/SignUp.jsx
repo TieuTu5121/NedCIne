@@ -26,14 +26,10 @@ export default function SignUp() {
         setUser(response?.data?.data);
         toast.success("Đăng ký thành công!!!");
         navigate("/default");
-      } else {
-        // Xử lý khi đăng nhập thất bại
-        toast.error("Đăng ký thất bại!!!");
-        ư;
       }
     } catch (error) {
       console.error("Register error:", error);
-      toast.error("An error occurred while logging in");
+      toast.error("Đăng ký thất bại!!!");
     } finally {
       setLoading(false); // Kết thúc quá trình loading
     }
@@ -54,15 +50,6 @@ export default function SignUp() {
         <div className="mt-8">
           {/* Các trường đăng ký */}
           <div className="flex flex-col mt-2">
-            {/* <input
-              className="rounded-lg px-4 py-3 placeholder-italic bg-gray-100 focus:border-0 focus:outline-0 focus:bg-white focus:shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)] mb-2"
-              type="email"
-              placeholder="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            /> */}
             <input
               className="rounded-lg px-4 py-3 placeholder-italic bg-gray-100 focus:border-0 focus:outline-0 focus:bg-white focus:shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)] mb-2"
               type="text"

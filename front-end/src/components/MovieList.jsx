@@ -1,43 +1,41 @@
-// import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
-// import movieApi from "../apis/movie";
-// import { nonAccentVietnamese } from "../composables/nonAccentVietnamese";
-// import MovieSlider from "../components/MovieSlider";
+import React, { useEffect } from "react";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
-// const MovieList = () => {
-//   const [movies, setMovies] = useState([]);
-//   const [searchQuery, setSearchQuery] = useState("");
-//   const [status, setStatus] = useState("");
+import { Link } from "react-router-dom";
+import MovieItem from "./MovieItem";
+const MovieList = ({ movies, movieStatus }) => {
+  const responsive = {
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
+      items: 5,
+    },
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 5,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 1,
+    },
+  };
+  return (
+    <>
+      <div className="grid lg:grid-cols-6 md:grid-cols-4  grid-cols-2   mt-4">
+        {movies
+          .filter((movie) => {
+            return movie.status == movieStatus || movieStatus === "";
+          })
+          .map((movie) => (
+            <MovieItem movie={movie} />
+          ))}
+      </div>
+    </>
+  );
+};
 
-//   useEffect(() => {
-//     movieApi.getAllMovies().then(({ data }) => {
-//       setMovies(data.data);
-//     });
-//   }, []);
-
-//   const toLowerCaseNonAccentVietnamese = (str) => {
-//     return nonAccentVietnamese().toLowerCaseNonAccentVietnamese(str);
-//   };
-
-//   const toLowerCaseSearchQuery = toLowerCaseNonAccentVietnamese(searchQuery);
-
-//   const filteredMovies = movies.filter((movie) => {
-//     const lowerCaseTitle = toLowerCaseNonAccentVietnamese(movie.title);
-//     return (
-//       searchQuery === "" || lowerCaseTitle.includes(toLowerCaseSearchQuery)
-//     );
-//   });
-
-//   return (
-//     <>
-//       {searchQuery && (
-//         <h1 className="mb-2 font-semibold text-xl">
-//           Kết quả tìm kiếm cho "{searchQuery}"
-//         </h1>
-//       )}
-//       <MovieSlider movies={filteredMovies} status={status} />
-//     </>
-//   );
-// };
-
-// export default MovieList;
+export default MovieList;

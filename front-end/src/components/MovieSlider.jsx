@@ -3,10 +3,8 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 import { Link } from "react-router-dom";
-const MovieSlider = ({ movies, status }) => {
-  useEffect(() => {
-    console.log("Data movie: ", movies);
-  }, []);
+import MovieItem from "./MovieItem";
+const MovieSlider = ({ movies, movieStatus }) => {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -31,7 +29,7 @@ const MovieSlider = ({ movies, status }) => {
         <Carousel responsive={responsive}>
           {movies
             .filter((movie) => {
-              return movie.status === status || status === "";
+              return movie.status == movieStatus || movieStatus === "";
             })
             .map((movie) => (
               <div className="Item rounded " key={movie.id}>
@@ -43,9 +41,8 @@ const MovieSlider = ({ movies, status }) => {
                       alt={movie.title}
                     />
                   </Link>
-                  <div className="absolute bottom-4 left-2 bg-opacity-40 bg-black w-40 text-white">
+                  <div className="absolute bottom-4 left-2 bg-opacity-40  w-40 text-teal-300">
                     <h3 className="Description ">{movie.title}</h3>
-                    <i>Ratings : 7.8</i>
                   </div>
                 </div>
               </div>

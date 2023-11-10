@@ -1,7 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* The following line can be included in a src/App.scss */
 
+.md-disallow-past-event-creation .mbsc-readonly-event {
+ opacity: 0.6;
+}
+.date {
+  display: inline-flex;
+  align-items: center;
+}
+
+.date span {
+  font-size: 1rem;
+ 
+}
+
+.date em {
+  font-size: 0.6rem;
+  font-style: italic;
+  margin-left: 0.5rem;
+}
+.date-pick {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.date-pick span,
+.date-pick em {
+  width: 100%;
+}
+
+.date-pick strong {
+  width: 50%;
+}
+
+.date-pick.october {
+  flex-direction: column-reverse;
+}
+
+
+.date p {
+  font-size: 2rem;
+  
+  margin-left: 0.5rem;
+}
 
 body {
   margin: 0;
@@ -9,6 +54,15 @@ body {
   z-index: 1;
   box-sizing: border-box;
   font-family: Roboto, sans-serif;
+}
+.carousel img {
+  max-width: 1280px;
+  max-height: 425px;
+  object-fit: cover;
+}
+.carousel{
+  max-width: 1330px;
+  max-height: 475px;
 }
 
 /* Navbar styles */

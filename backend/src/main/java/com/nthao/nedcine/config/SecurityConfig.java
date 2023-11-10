@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
+//@EnableManagementContext
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
@@ -71,7 +71,11 @@ public class SecurityConfig {
                         new AntPathRequestMatcher("/api/v1/cinemas/**"),
                         new AntPathRequestMatcher("/api/v1/products/**"),
                         new AntPathRequestMatcher("/api/v1/rooms/**"),
-                        new AntPathRequestMatcher("/api/v1/showtimes/**")
+                        new AntPathRequestMatcher("/api/v1/showtimes/**"),
+                        new AntPathRequestMatcher("/api/v1/seat-settings/**"),
+                        new AntPathRequestMatcher("/actuator/**"),
+                        new AntPathRequestMatcher("/api/v1/orders/**"),
+                        new AntPathRequestMatcher("/api/v1/emails/**")
 
                 )
                 .permitAll()
@@ -85,6 +89,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider())
+
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

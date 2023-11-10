@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDto getProductById(int id) {
+    public ProductResponseDto getProductById(long id) {
 
         Product product = productsRepository.getById(id);
 
@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDto updateProduct(int id, ProductRequestDto product) {
+    public ProductResponseDto updateProduct(long id, ProductRequestDto product) {
         Product existProduct = productsRepository.getById(id);
         if (existProduct != null) {
             existProduct.setName(product.getName());
@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProduct(int id) {
+    public void deleteProduct(long id) {
         productsRepository.deleteById(id);
     }
 }

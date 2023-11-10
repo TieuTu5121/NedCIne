@@ -23,6 +23,10 @@ import MovieDetail from "./Customer/MovieDetail";
 import ProductManagementEdit from "./Admin/ProductManagementEdit";
 import RoomManagement from "./Admin/RoomManagement";
 import RoomManagementEdit from "./Admin/RoomManagementEdit";
+import ShowtimeManagementEdit from "./Admin/ShowtimeManagementEdit";
+import BookingTicket from "./Customer/BookingTicket";
+import UserOrders from "./Customer/UserOrders";
+import OrderDetail from "./Customer/OrderDetail";
 
 function App() {
   return (
@@ -35,13 +39,22 @@ function App() {
             <Route path="/default/register" element={<SignUp />} />
             <Route
               path="/default/showing"
-              element={<MovieSchedule movieStatus="Đang chiếu" />}
+              element={<MovieSchedule movieStatus="SHOWING" />}
             />
             <Route
               path="/default/coming"
-              element={<MovieSchedule movieStatus="Sắp chiếu" />}
+              element={<MovieSchedule movieStatus="COMING" />}
             />
             <Route path="/default/movies/:id" element={<MovieDetail />} />
+            <Route
+              path="/default/movies/booking-ticket/:id"
+              element={<BookingTicket />}
+            />
+            <Route path="/default/user-orders" element={<UserOrders />}></Route>
+            <Route
+              path="/default/user-orders/view/:id"
+              element={<OrderDetail />}
+            />
           </Route>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminIndex />} />
@@ -101,6 +114,14 @@ function App() {
             <Route
               path="/admin/showtime-management"
               element={<ShowtimeManagement />}
+            />
+            <Route
+              path="/admin/cinema/:choosenCineId/showtimes/edit/:id"
+              element={<ShowtimeManagementEdit />}
+            />
+            <Route
+              path="/admin/cinema/:choosenCineId/showtimes/edit/"
+              element={<ShowtimeManagementEdit />}
             />
             <Route
               path="/admin/orders-management"

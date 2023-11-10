@@ -15,13 +15,9 @@ import javax.persistence.*;
 public class SeatSetting {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
-    private int id;
-    @ManyToOne
-    @JoinColumn(name = "seat")
-    private Seat seat;
-    @ManyToOne
-    @JoinColumn(name = "showtime")
-    private Showtime showtime;
+    private long id;
+    private long seatId;
+    private long showtimeId;
     @Column(columnDefinition = "varchar(255)")
     private String status;
 }

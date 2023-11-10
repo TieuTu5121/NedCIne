@@ -5,10 +5,10 @@ const MovieItem = ({ movie }) => {
   return (
     <div
       key={movie.id}
-      className="w-72 mb-6 cursor-pointer group relative hover:shadow-md pb-4 rounded-lg"
+      className=" mb-6 cursor-pointer  hover:shadow-md pb-4 mr-2 rounded-lg"
     >
       <Link to={`/movie/${movie.id}`}>
-        <img src={movie.poster} alt="" className="w-full h-96" />
+        <img src={movie.poster} alt="" className="w-64   h-56" />
         <div className="mt-3 mb-2 mx-2">
           <h3 className="font-bold uppercase group-hover:text-red-400 text-lg mb-1">
             {movie.title}

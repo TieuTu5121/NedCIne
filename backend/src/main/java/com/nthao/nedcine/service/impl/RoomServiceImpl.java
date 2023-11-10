@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -133,10 +134,10 @@ public class RoomServiceImpl implements RoomService {
         if (roomEntity != null) {
             // Tìm tất cả các ghế trong phòng chiếu có ID là id
             List<Seat> seats = seatRepository.findSeatsByRoomId(id);
-            List<SeatSetting> seatSettings = seatSettingRepository.findAllBySeat(seats);
-
-
-            seatSettingRepository.deleteAll(seatSettings);
+//            List<SeatSetting> seatSettings = seatSettingRepository.findAllBySeat(seats.stream().map(Seat::getId).collect(Collectors.toList()));
+//
+//
+//            seatSettingRepository.deleteAll(seatSettings);
 
             // Xóa tất cả các ghế
             seatRepository.deleteAll(seats);

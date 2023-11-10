@@ -11,4 +11,6 @@ public interface CinemaRepository extends JpaRepository<Cinema, Integer> {
 
     @Query("select cine from Cinema cine where  cine.city = :city")
     List<Cinema> findByCity(String city);
+
+
 }

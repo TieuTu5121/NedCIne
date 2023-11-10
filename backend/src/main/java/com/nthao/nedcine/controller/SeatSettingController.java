@@ -2,6 +2,7 @@ package com.nthao.nedcine.controller;
 
 import com.nthao.nedcine.dto.seatSetting.SeatSettingRequestDto;
 import com.nthao.nedcine.dto.seatSetting.SeatSettingResponseDto;
+import com.nthao.nedcine.entity.SeatSetting;
 import com.nthao.nedcine.service.SeatSettingService;
 import com.nthao.nedcine.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,16 @@ public class SeatSettingController {
         SeatSettingResponseDto seatSettingResponseDto = seatSettingService.createSeatSetting(seatSettingRequestDto);
         return new Response(seatSettingResponseDto, start);
     }
-
+    @GetMapping(value = "/get-by-showtime/{showtimeId}")
+    public Response getByShowtime(@PathVariable Long showtimeId){
+        long start = System.currentTimeMillis();
+        List<SeatSettingResponseDto> seatSettingResponseDtos = seatSettingService.getSeatSettingByShowTime(showtimeId);
+        if (seatSettingResponseDtos != null) {
+            return new Response(seatSettingResponseDtos, start);
+        } else {
+            return new Response(404, "SeatSettings not found", start);
+        }
+    }
     @PutMapping ("/{id}")
     public Response updateSeatSetting(@PathVariable Integer id, @RequestBody SeatSettingRequestDto seatSettingRequestDto) {
         long start = System.currentTimeMillis();

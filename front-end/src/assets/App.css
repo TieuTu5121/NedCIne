@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+/* The following line can be included in a src/App.scss */
+@import '~bootstrap/scss/bootstrap';
 body {
   margin: 0;
   padding: 0;
@@ -18,7 +20,9 @@ body {
   padding-left: 5%;
   padding-right: 5%;
 }
-
+.md-disallow-past-event-creation .mbsc-readonly-event {
+  opacity: .6;
+}
 .Navbar input {
   width: 500px;
   padding-left: 20px;
@@ -50,6 +54,28 @@ body {
   height: 37px;
   cursor: pointer;
 }
+.date {
+  display: inline-flex;
+  align-items: center;
+}
+
+.date span {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.date em {
+  font-size: 0.8rem;
+  font-style: italic;
+  margin-left: 0.5rem;
+}
+
+.date strong {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
+
 
 /* Styling Tabs */
 .Tabs {

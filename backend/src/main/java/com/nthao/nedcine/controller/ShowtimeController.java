@@ -1,15 +1,20 @@
 package com.nthao.nedcine.controller;
 
 
-
+import com.nthao.nedcine.dto.showtime.ShowtimeBookingResponseDto;
+import com.nthao.nedcine.dto.showtime.ShowtimeRequestBookingDto;
 import com.nthao.nedcine.dto.showtime.ShowtimeRequestDto;
 import com.nthao.nedcine.dto.showtime.ShowtimeResponseDto;
 import com.nthao.nedcine.service.ShowtimeService;
+import com.nthao.nedcine.util.PageDataResponse;
+import com.nthao.nedcine.util.PageResponse;
 import com.nthao.nedcine.util.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping ("/api/v1/showtimes")
@@ -40,6 +45,23 @@ public class ShowtimeController {
         }
     }
 
+    @GetMapping ("/get-by-cinema/{cinemaId}")
+    public PageResponse getShowtimesByCinema(
+            @PathVariable Integer cinemaId,
+            @RequestParam (defaultValue = "1") long page
+    ) {
+        long start = System.currentTimeMillis();
+        List<ShowtimeResponseDto> showtimeResponseDtos = showtimeService.getShowtiemsByCinema(cinemaId);
+        long totalShowtimes = showtimeResponseDtos.stream().count();
+        // Tạo đối tượng PageDataResponse
+        PageDataResponse pageDataResponse = new PageDataResponse((long) 0, (long) 10,page, showtimeResponseDtos.stream()
+                .skip((page - 1) * 10)
+                .limit(10)
+                .collect(Collectors.toList()));
+        pageDataResponse.setTotalPage((totalShowtimes / 10) );
+        return new PageResponse(200, pageDataResponse, System.currentTimeMillis() - start);
+    }
+
     @PostMapping
     public Response createShowtime(@RequestBody ShowtimeRequestDto showtimeRequestDto) {
         long start = System.currentTimeMillis();
@@ -56,6 +78,20 @@ public class ShowtimeController {
         } else {
             return new Response(404, "Showtime not found", start);
         }
+    }
+
+    @PostMapping ("/get-by-cityAndShowDate")
+    public Response getShowtimesByCityAndDate(@RequestBody ShowtimeRequestBookingDto showtimeRequestBookingDto) {
+        long start = System.currentTimeMillis();
+        try {
+            List<ShowtimeBookingResponseDto> showtimes = showtimeService.getShowtimesByCityAndDate(showtimeRequestBookingDto);
+            return new Response(showtimes, start);
+
+        } catch (Exception e) {
+            return new Response(404, e.getMessage(), start);
+
+        }
+
     }
 
     @DeleteMapping ("/{id}")
