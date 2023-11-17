@@ -27,6 +27,7 @@ import ShowtimeManagementEdit from "./Admin/ShowtimeManagementEdit";
 import BookingTicket from "./Customer/BookingTicket";
 import UserOrders from "./Customer/UserOrders";
 import OrderDetail from "./Customer/OrderDetail";
+import AdminSignIn from "./Admin/AdminSignIn";
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
           </Route>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminIndex />} />
+            <Route path="/admin/login" element={<AdminSignIn />} />
             <Route
               path="/admin/movie-management"
               element={<MovieManagement />}

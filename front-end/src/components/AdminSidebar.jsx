@@ -1,36 +1,24 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
-// import { useSignOut } from "@/composables/useSignOut";
-// import { projectAuth } from "@/configs/firebase";
-
+import { removeData } from "../configs/authentication";
 function AdminSidebar({ dashboard }) {
   //   const { signOut } = useSignOut();
 
   //   const [isAccess, setIsAccess] = useState(false);
   //   const [role, setRole] = useState("");
   const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
-  //   useEffect(() => {
-  //     const fetchRole = async () => {
-  //       try {
-  //         const response = await fetch(
-  //           `http://localhost:3000/api/roles/${projectAuth.currentUser.uid}`
-  //         );
-  //         const data = await response.json();
-  //         const userRole = data.role;
-  //         setRole(userRole);
-  //         setIsAccess(userRole === "admin");
-  //       } catch (error) {
-  //         setIsAccess(false);
-  //       }
-  //     };
-
-  //     fetchRole();
-  //   }, []);
   useEffect(() => {
-    console.log("user: ", user);
+    // console.log("user: ", user);
   }, []);
+  const signOut = () => {
+    removeData();
+    setUser(null);
+
+    navigate("/admin/login");
+  };
   return (
     <div className="fixed w-[254px] h-full relative">
       <Link to="/admin">
@@ -126,14 +114,10 @@ function AdminSidebar({ dashboard }) {
         </li>
         <div className=" w-full">
           <li
-            className={` border-b-2 border-t-2 border-gray-300 cursor-pointer flex justify-between absolute items-center flex-grow  bottom-0 w-full`}
+            onClick={signOut}
+            className={`block px-4 py-4 hover:bg-red-600 w-full border-b-2 border-t-2 border-gray-300 cursor-pointer flex justify-between absolute items-center flex-grow  bottom-0 w-full`}
           >
-            <Link
-              className="block px-4 py-4 hover:bg-red-600 w-full "
-              // onClick={signOut}
-            >
-              Đăng xuất
-            </Link>
+            Đăng xuất
             <i className="fa-solid fa-right-from-bracket right-3 "></i>
           </li>
         </div>

@@ -23,10 +23,9 @@ const ChosingShowtimeModal = ({ isOpen, onClose }) => {
   }, []);
   useEffect(() => {
     if (selectedCity !== "" && selectedDate !== null) {
-      console.log(selectedDate);
       fetchShowtimeByDateAndCity(selectedDate, selectedCity);
-      console.log(showtimesByCityAndDate.length);
     }
+    console.log("fetchShowtimeByDateAndCity: ", showtimesByCityAndDate);
   }, [selectedCity, selectedDate]);
   const style = {
     position: "fixed",
@@ -42,7 +41,6 @@ const ChosingShowtimeModal = ({ isOpen, onClose }) => {
     mt: 8,
     overflow: "auto",
   };
-
   const fetchShowtimeByDateAndCity = async (date, city) => {
     try {
       const data = {
@@ -65,10 +63,8 @@ const ChosingShowtimeModal = ({ isOpen, onClose }) => {
     for (let i = 0; i < 7; i++) {
       const date = new Date();
       date.setDate(date.getDate() + i);
-      console.log(date);
       dateList.push(date);
     }
-    console.log(dateList);
     setDates(dateList);
   };
   const handleClickShowtime = () => {};
@@ -128,7 +124,6 @@ const ChosingShowtimeModal = ({ isOpen, onClose }) => {
                   value="Can tho"
                   onClick={(e) => {
                     setSelectedCity(e.target.value);
-                    // console.log(selectedCity);
                   }}
                 >
                   Cần Thơ
@@ -144,7 +139,6 @@ const ChosingShowtimeModal = ({ isOpen, onClose }) => {
                   value="Ha noi"
                   onClick={(e) => {
                     setSelectedCity(e.target.value);
-                    console.log(selectedCity);
                   }}
                 >
                   Hà Nội
@@ -160,7 +154,6 @@ const ChosingShowtimeModal = ({ isOpen, onClose }) => {
                   value="Kien giang"
                   onClick={(e) => {
                     setSelectedCity(e.target.value);
-                    console.log(selectedCity);
                   }}
                 >
                   Kiên Giang

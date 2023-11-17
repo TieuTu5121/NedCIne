@@ -112,10 +112,10 @@ const HomePage = () => {
         </div>
 
         <div className="relative flex border-t-2 border-b-2 border-black w-full overflow-x-auto  hidden md:block">
-          <ul class="flex space-x-4">
+          <ul className="flex space-x-4">
             <li>
               <a
-                class="dx"
+                className="dx"
                 href="https://www.cgv.vn/default/theaters/special/4dx"
               >
                 4DX
@@ -123,7 +123,7 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                class="imax"
+                className="imax"
                 href="https://www.cgv.vn/default/theaters/special/imax"
               >
                 Imax
@@ -131,7 +131,7 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                class="starium"
+                className="starium"
                 href="https://www.cgv.vn/default/theaters/special/starium"
               >
                 Starium
@@ -139,15 +139,15 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                class="gold-class"
-                href="https://www.cgv.vn/default/theaters/special/gold-class"
+                className="gold-className"
+                href="https://www.cgv.vn/default/theaters/special/gold-className"
               >
                 Goldclass
               </a>
             </li>
             <li>
               <a
-                class="lamour"
+                className="lamour"
                 href="https://www.cgv.vn/default/theaters/special/lamour"
               >
                 L'amour
@@ -155,7 +155,7 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                class="sweet"
+                className="sweet"
                 href="https://www.cgv.vn/default/theaters/special/sweetbox"
               >
                 Sweetbox
@@ -163,7 +163,7 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                class="premium-cinema"
+                className="premium-cinema"
                 href="https://www.cgv.vn/default/theaters/special/premium"
               >
                 Premium Cinema
@@ -171,7 +171,7 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                class="screenx"
+                className="screenx"
                 href="https://www.cgv.vn/default/theaters/special/screenx"
               >
                 Screenx
@@ -179,7 +179,7 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                class="cine-foret"
+                className="cine-foret"
                 href="https://www.cgv.vn/default/theaters/special/cine-foret"
               >
                 Cine &amp; Foret
@@ -187,7 +187,7 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                class="cine-livingroom"
+                className="cine-livingroom"
                 href="https://www.cgv.vn/default/theaters/special/cine-living"
               >
                 Cine &amp; Living Room
@@ -195,7 +195,7 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                class="cine-suite"
+                className="cine-suite"
                 href="https://www.cgv.vn/default/theaters/special/cine-suite"
               >
                 Cine Suite

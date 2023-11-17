@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import { removeData } from "../configs/authentication";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
@@ -9,7 +9,7 @@ const Header = () => {
   const [search, setSearch] = useState("");
   const [isMobile, setIsMobile] = useState(false);
   const { user, setUser } = useContext(UserContext);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -103,7 +103,7 @@ const Header = () => {
               </ul>
             </div>
           ) : (
-            <Link to="/default/login" className="hover:text-red-400">
+            <Link to="/default/login" className="hover:text-red-400 text-white">
               Đăng nhập
             </Link>
           )}

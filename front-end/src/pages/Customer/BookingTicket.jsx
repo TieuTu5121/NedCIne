@@ -48,7 +48,7 @@ const BookingTicket = () => {
   const { id } = useParams();
   const { user } = useContext(UserContext);
   const history = useNavigate();
-
+  const [selectedSeatsMap, setSelectedSeatsMap] = useState({});
   useEffect(() => {
     fetchData();
     console.log("fetch data ");
@@ -81,7 +81,7 @@ const BookingTicket = () => {
   const fetchData = async () => {
     const response = await showtimeApi.getShowtimeById(id);
     setShowtime(response?.data?.data);
-    console.log(response?.data?.data);
+    // console.log(response?.data?.data);
     setIsLoanding(false);
 
     const seatResponse = await seatSettingApi.getByShowtimeId(id);
@@ -102,8 +102,33 @@ const BookingTicket = () => {
     // console.log(new Date(showtime.showdate));
     changeShowtimeToTimeString();
   };
+  const toggleSeat = (seatId) => {
+    setSelectedSeatsMap((prevMap) => {
+      const newMap = { ...prevMap };
+
+      if (!newMap[seatId]) {
+        // Thêm ghế vào danh sách nếu chưa được chọn
+        newMap[seatId] = true;
+
+        // Thêm thông tin ghế vào danh sách selectedSeats
+        const seat = seats.find((seat) => seat.id == seatId);
+        setSelectedSeats((prevSeats) => [...prevSeats, seat]);
+      } else {
+        // Hủy chọn ghế nếu đã được chọn
+        delete newMap[seatId];
+
+        // Xóa thông tin ghế khỏi danh sách selectedSeats
+        setSelectedSeats((prevSeats) =>
+          prevSeats.filter((seat) => seat.id !== seatId)
+        );
+      }
+
+      return newMap;
+    });
+  };
 
   const renderSeats = () => {
+    console.log("render seats");
     const rows = [];
     for (let i = 0; i < seats.length; i += 15) {
       const row = seats.slice(i, i + 15);
@@ -113,21 +138,14 @@ const BookingTicket = () => {
             <button
               key={seat.id}
               className={`border-black  border rounded p-1 text-black   mr-2 text-center   text-xs ${
-                seat.status == "BOOKED" ? "bg-slate-300" : ""
-              } ${
-                selectedSeatsID.find((seatID) => seat.id == seatID)
-                  ? "bg-red-500"
-                  : ""
-              }`}
+                seat.status === "BOOKED" ? "bg-slate-300" : ""
+              } ${selectedSeatsMap[seat.id] ? "bg-red-500" : ""}`}
               disabled={seat.status === "BOOKED"}
               style={{
                 fontSize: "10px",
                 width: 30,
               }}
-              value={seat.id}
-              onClick={(e) => {
-                toggleSeat(e.target.value);
-              }}
+              onClick={() => toggleSeat(seat.id)}
             >
               <span className="text-center">
                 {seat.seat.row + seat.seat.seatNumber}
@@ -140,28 +158,28 @@ const BookingTicket = () => {
 
     return rows;
   };
-  const toggleSeat = (seatId) => {
-    // Chuyển đổi seatId sang dạng số
-    seatId = Number(seatId);
+  // const toggleSeat = (seatId) => {
+  //   // Chuyển đổi seatId sang dạng số
+  //   seatId = Number(seatId);
 
-    // Kiểm tra xem seatId có phải là số và không phải là null hoặc undefined không
-    if (!isNaN(seatId) && seatId != null && seatId != undefined) {
-      if (!selectedSeatsID.includes(seatId)) {
-        // Thêm seatId vào selectedSeatsID
-        setSelectedSeatsID([...selectedSeatsID, seatId]);
+  //   // Kiểm tra xem seatId có phải là số và không phải là null hoặc undefined không
+  //   if (!isNaN(seatId) && seatId != null && seatId != undefined) {
+  //     if (!selectedSeatsID.includes(seatId)) {
+  //       // Thêm seatId vào selectedSeatsID
+  //       setSelectedSeatsID([...selectedSeatsID, seatId]);
 
-        // Thêm seat tương ứng với seatId vào selectedSeats
-        const seat = seats.find((seat) => seat.id == seatId);
-        setSelectedSeats([...selectedSeats, seat]);
-      } else {
-        // Xóa seatId khỏi selectedSeatsID
-        setSelectedSeatsID(selectedSeatsID.filter((id) => id != seatId));
+  //       // Thêm seat tương ứng với seatId vào selectedSeats
+  //       const seat = seats.find((seat) => seat.id == seatId);
+  //       setSelectedSeats([...selectedSeats, seat]);
+  //     } else {
+  //       // Xóa seatId khỏi selectedSeatsID
+  //       setSelectedSeatsID(selectedSeatsID.filter((id) => id != seatId));
 
-        // Xóa seat tương ứng với seatId khỏi selectedSeats
-        setSelectedSeats(selectedSeats.filter((seat) => seat.id != seatId));
-      }
-    }
-  };
+  //       // Xóa seat tương ứng với seatId khỏi selectedSeats
+  //       setSelectedSeats(selectedSeats.filter((seat) => seat.id != seatId));
+  //     }
+  //   }
+  // };
 
   const handleDecreaseQuantity = (foodId) => {
     const food = foodOrder.find((food) => food.productId === foodId);
@@ -240,21 +258,19 @@ const BookingTicket = () => {
       toast.success("Đặt vé thành công!!!");
       setOrder(data?.data?.data);
       orderApi.getOrderById(data?.data?.data.id).then((data) => {
-        console.log(data);
-        emailjs
-          .send(
-            EMAILJS_SERVICE_ID,
-            EMAILJS_COMFIRM_TICKET_TEMPLATE,
-            {
-              name: user?.username,
-              movieTitle: showtime.movie.title,
-              showtime: changeShowtimeToTimeString(),
-              email: user.email,
-              linkOrder: `http://localhost:3000/default/user-orders/view/${data.data.data.id}`,
-            },
-            EMAILJS_PUBLIC_KEY
-          )
-          .then((result) => console.log(result.text));
+        // console.log(data);
+        emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_COMFIRM_TICKET_TEMPLATE,
+          {
+            name: user?.username,
+            movieTitle: showtime.movie.title,
+            showtime: changeShowtimeToTimeString(),
+            email: user.email,
+            linkOrder: `http://localhost:3000/default/user-orders/view/${data.data.data.id}`,
+          },
+          EMAILJS_PUBLIC_KEY
+        );
       });
       history("/default");
     });
@@ -265,7 +281,7 @@ const BookingTicket = () => {
     const year = new Date(showtime?.showdate).getFullYear();
     const showtimeString =
       showtime.showtime + " ngày " + day + "-" + month + "-" + year;
-    console.log(showtime.showtime + " ngày " + day + "-" + month + "-" + year);
+    // console.log(showtime.showtime + " ngày " + day + "-" + month + "-" + year);
     return showtimeString;
   };
 

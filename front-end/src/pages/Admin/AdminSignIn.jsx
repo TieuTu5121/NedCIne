@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { APP_TITLE } from "../../contants";
 import { UserContext } from "../../components/UserContext";
 
-function SignIn() {
+function AdminSignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { user, setUser } = useContext(UserContext);
@@ -13,7 +13,7 @@ function SignIn() {
 
   const navigate = useNavigate();
 
-  document.title = APP_TITLE + " Đăng nhập";
+  document.title = APP_TITLE + "Admin Đăng nhập";
 
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
@@ -25,9 +25,15 @@ function SignIn() {
 
       if (response?.data.codeStatus === 200 && !response?.data?.data.message) {
         setUser(response?.data.data.user);
-        navigate(-1);
-        toast.success("Đăng nhập thành công!");
-        // console.log(response?.data.data.user.roles[0] === "USER");
+        if (response?.data.data.user.roles[0] == "ADMIN") {
+          navigate("/admin");
+          toast.success("Đăng nhập thành công!");
+          console.log("authorities: ", response?.data.data.user.authorities);
+        } else {
+          navigate("/default");
+          toast.success("Đăng nhập thành công!");
+          console.log(response?.data.data.user);
+        }
         // toast.success("Đăng nhập thành công!!!");
       } else {
         response?.data?.data.message
@@ -46,16 +52,8 @@ function SignIn() {
   return (
     <>
       <form className="px-96 mt-28" onSubmit={handleLoginSubmit}>
-        <h1 className="text-3xl font-bold text-center mb-2">ĐĂNG NHẬP</h1>
-        <h3 className="text-center">
-          Chưa có tài khoản?{" "}
-          <Link
-            to="/default/register"
-            className="text-blue-500 underline hover:cursor-pointer"
-          >
-            Đăng ký ngay
-          </Link>
-        </h3>
+        <h1 className="text-3xl font-bold text-center mb-2">ADMIN ĐĂNG NHẬP</h1>
+
         <div className="mt-8">
           <div className="flex flex-col mt-2">
             <input
@@ -79,19 +77,6 @@ function SignIn() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-
-          <div className="flex items-center justify-between mt-2">
-            <div>
-              <input type="checkbox" name="" id="remember" className="mr-1" />
-              <label htmlFor="remember">Nhớ tài khoản</label>
-            </div>
-            <div>
-              <a href="#" className="text-blue-500 hover:text-red-500">
-                Quên mật khẩu?
-              </a>
-            </div>
-          </div>
-
           <div className="flex justify-end">
             <button
               type="submit"
@@ -102,12 +87,9 @@ function SignIn() {
             </button>
           </div>
         </div>
-        {/* <div className="text-center mt-5">
-          <span className="text-red-400">{error}</span>
-        </div> */}
       </form>
     </>
   );
 }
 
-export default SignIn;
+export default AdminSignIn;
