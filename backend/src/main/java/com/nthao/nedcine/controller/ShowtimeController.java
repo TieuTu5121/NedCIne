@@ -45,22 +45,31 @@ public class ShowtimeController {
         }
     }
 
-    @GetMapping ("/get-by-cinema/{cinemaId}")
+    @GetMapping("/get-by-cinema/{cinemaId}")
     public PageResponse getShowtimesByCinema(
             @PathVariable Integer cinemaId,
-            @RequestParam (defaultValue = "1") long page
+            @RequestParam(defaultValue = "1") long page
     ) {
         long start = System.currentTimeMillis();
         List<ShowtimeResponseDto> showtimeResponseDtos = showtimeService.getShowtiemsByCinema(cinemaId);
-        long totalShowtimes = showtimeResponseDtos.stream().count();
+        long totalShowtimes = showtimeResponseDtos.size();
+
+        // Tính toán số trang
+        long totalPages = totalShowtimes / 10;
+        if (totalShowtimes % 10 != 0) {
+            totalPages += 1;
+        }
+
         // Tạo đối tượng PageDataResponse
-        PageDataResponse pageDataResponse = new PageDataResponse((long) 0, (long) 10,page, showtimeResponseDtos.stream()
+        PageDataResponse pageDataResponse = new PageDataResponse((long) 0, (long) 10, page, showtimeResponseDtos.stream()
                 .skip((page - 1) * 10)
                 .limit(10)
                 .collect(Collectors.toList()));
-        pageDataResponse.setTotalPage((totalShowtimes / 10) );
+        pageDataResponse.setTotalPage(totalPages);
+
         return new PageResponse(200, pageDataResponse, System.currentTimeMillis() - start);
     }
+
 
     @PostMapping
     public Response createShowtime(@RequestBody ShowtimeRequestDto showtimeRequestDto) {

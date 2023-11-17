@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -95,9 +97,24 @@ public class ShowtimeServiceImpl implements ShowtimeService {
 
         return showtimeMapper(newShowtime);
     }
+    @Override
     public List<ShowtimeBookingResponseDto> getShowtimesByCityAndDate(ShowtimeRequestBookingDto showtimeRequestBookingDto) {
+        // Lấy thời điểm hiện tại
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        // Lọc ra các showtime sau giờ hiện tại
         List<Showtime> showtimes = showtimeRepository.getShowtimesByCityAndShowDate(
-                showtimeRequestBookingDto.getDate(), showtimeRequestBookingDto.getCity(),showtimeRequestBookingDto.getMovieId());
+                        showtimeRequestBookingDto.getDate(), showtimeRequestBookingDto.getCity(), showtimeRequestBookingDto.getMovieId())
+                .stream()
+                .filter(showtime -> {
+                    String showDate = showtime.getShowDate();
+                    String startTime = showtime.getStartTime();
+                    LocalDateTime showDateTime = LocalDateTime.parse(showDate + " " + startTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
+                    // So sánh thời điểm show với thời điểm hiện tại
+                    return showDateTime.isAfter(currentDateTime);
+                })
+                .collect(Collectors.toList());
 
         // Sử dụng Stream API để nhóm các Showtime theo Cinema
         Map<Cinema, List<Showtime>> showtimesByCinema = showtimes.stream()
@@ -114,6 +131,7 @@ public class ShowtimeServiceImpl implements ShowtimeService {
 
         return result;
     }
+
 
 
 
@@ -136,10 +154,10 @@ public class ShowtimeServiceImpl implements ShowtimeService {
     public List<ShowtimeResponseDto> getShowtiemsByCinema(int cinemaId) {
         Cinema cinema = cinemaRepository.findById(cinemaId).get();
         List<Room> rooms = roomRepository.findAllByCinema(cinema);
-        List<Showtime> showtimes = new ArrayList<>();
-        for (Room room : rooms) {
-            showtimes.addAll(showtimeRepository.getShowtimesByRoom(room));
-        }
+        List<Showtime> showtimes = showtimeRepository.getShowtimesByRoom(rooms);
+
+
+
 
         // Chuyển đổi danh sách showtime thành danh sách showtime response DTO
         List<ShowtimeResponseDto> showtimeResponseDtos = new ArrayList<>();

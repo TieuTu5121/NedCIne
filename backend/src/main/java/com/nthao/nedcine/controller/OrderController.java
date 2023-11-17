@@ -31,8 +31,8 @@ public class OrderController {
                 .skip((page - 1) * 10)
                 .limit(10)
                 .collect(Collectors.toList()));
-        pageDataResponse.setTotalPage((totalOrders / 10) + 1);
-        return new PageResponse(200, pageDataResponse, System.currentTimeMillis() - start);
+        pageDataResponse.setTotalPage((totalOrders / 10) );
+        return new PageResponse(200, pageDataResponse,  start);
     }
 
     @PostMapping
@@ -69,12 +69,14 @@ public class OrderController {
 
         List<OrderResponseDto> orderResponseDtos = orderService.getOrderByUser(id);
         long totalOrders = orderResponseDtos.stream().count();
+        long totalPage = totalOrders /10;
+        if(totalOrders % 10 != 0 ) totalPage+=1;
         // Tạo đối tượng PageDataResponse
         PageDataResponse pageDataResponse = new PageDataResponse((long) 0, (long) 10, page, orderResponseDtos.stream()
                 .skip((page - 1) * 10)
                 .limit(10)
                 .collect(Collectors.toList()));
-        pageDataResponse.setTotalPage((totalOrders / 10) + 1);
+        pageDataResponse.setTotalPage(totalPage);
         return new PageResponse(200, pageDataResponse, System.currentTimeMillis() - start);
     }
 }
