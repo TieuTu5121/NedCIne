@@ -20,4 +20,6 @@ public class Order {
     private String state;
     private float discount;
     private String createdAt;
+    private String paymentType;
+
 }

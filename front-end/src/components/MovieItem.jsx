@@ -7,13 +7,13 @@ const MovieItem = ({ movie }) => {
       key={movie.id}
       className=" mb-6 cursor-pointer  hover:shadow-md pb-4 mr-2 rounded-lg"
     >
-      <Link to={`/movie/${movie.id}`}>
+      <Link to={`/default/movies/${movie.id}`}>
         <img src={movie.poster} alt="" className="w-64   h-56" />
-        <div className="mt-3 mb-2 mx-2">
+        <div className="mt-3 mb-2 mx-2 items-end flex-column">
           <h3 className="font-bold uppercase group-hover:text-red-400 text-lg mb-1">
             {movie.title}
           </h3>
-          <p className="capitalize">
+          <p className="capitalize ">
             <strong>Thể Loại:</strong> {movie.genres}
           </p>
           <p>

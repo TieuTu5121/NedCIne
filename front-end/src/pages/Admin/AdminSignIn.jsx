@@ -25,7 +25,10 @@ function AdminSignIn() {
 
       if (response?.data.codeStatus === 200 && !response?.data?.data.message) {
         setUser(response?.data.data.user);
-        if (response?.data.data.user.roles[0] == "ADMIN") {
+        if (
+          response?.data.data.user.roles[0] == "ADMIN" ||
+          response?.data.data.user.roles[0] == "EMPLOYEE"
+        ) {
           navigate("/admin");
           toast.success("Đăng nhập thành công!");
           console.log("authorities: ", response?.data.data.user.authorities);

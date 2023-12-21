@@ -4,6 +4,7 @@ import { UserContext } from "./UserContext";
 import { removeData } from "../configs/authentication";
 import { faUser, faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { nonAccentVietnamese } from "../composables/nonAccentVietnamese";
 
 const Header = () => {
   const [search, setSearch] = useState("");
@@ -11,6 +12,7 @@ const Header = () => {
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   useEffect(() => {
+    console.log(user);
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -27,6 +29,15 @@ const Header = () => {
     setUser(null);
     navigate("/default/login");
   };
+  const handleSearch = () => {
+    const normalizedSearch =
+      nonAccentVietnamese().toLowerCaseNonAccentVietnamese(search);
+    // Perform your search logic here, for example, filter movies
+    console.log(normalizedSearch);
+
+    // Redirect to the search results page with the search query as a parameter
+    navigate(`/default/result?search=${normalizedSearch}`);
+  };
 
   return (
     <header id="header" className="h-14 bg-black top-0 left-0 right-0">
@@ -40,36 +51,31 @@ const Header = () => {
         ) : (
           <>
             <ul className="flex items-center justify-between text-xl h-full text-white font-semibold flex-grow-2">
-              <li className="mr-12">
+              <li className="mr-12 uppercase">
                 <Link to="/default" className="hover:text-red-400">
                   Trang Chủ
                 </Link>
               </li>
-              <li className="mr-12 hover:text-red">
-                <Link to="/default/showing">Phim Đang Chiếu</Link>
+              <li className="mr-12 uppercase hover:text-red">
+                <Link to="/default/showing">Phim</Link>
               </li>
-              <li className="mr-12 hover:text-red">
-                <Link to="/default/coming">Phim Sắp Chiếu</Link>
-              </li>
-              <li className="mr-12 hover:text-red">
-                <Link to="/default/cinema">Rạp NedCine</Link>
-              </li>
-              <li className="mr-12 hover:text-red">
-                <Link to="/default/genre">Thể Loại</Link>
+
+              <li className="mr-12 uppercase hover:text-red">
+                <Link>Khuyến Mãi</Link>
               </li>
             </ul>
 
             <div className="flex items-center">
-              <div className="relative mr-6 h-full">
+              <div className="relative  h-full">
                 <input
                   type="text"
-                  className="w-56 h-10 rounded-lg pl-4 pr-9"
+                  className="w-96 h-10 rounded-lg pl-4 pr-9"
                   placeholder="Nhập để tìm kiếm..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyUp={(e) => {
                     if (e.key === "Enter") {
-                      // Redirect or perform search action here
+                      handleSearch();
                     }
                   }}
                 />

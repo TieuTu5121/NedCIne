@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Builder
 @Table(name = "Comments", uniqueConstraints = {@UniqueConstraint(columnNames = {"userId", "movieId"})})
-public class Comments {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +21,7 @@ public class Comments {
     private long userId;
 
 
-    private long movieId;
+    private int movieId;
 
     private int rating;
     private String description;

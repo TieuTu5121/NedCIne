@@ -1,6 +1,7 @@
 package com.nthao.nedcine.dto.comments;
 
 import com.nthao.nedcine.entity.Movie;
+import com.nthao.nedcine.entity.UserEntity;
 import lombok.*;
 import org.apache.catalina.User;
 
@@ -10,8 +11,9 @@ import org.apache.catalina.User;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentResponse {
-    private User user;
+public class CommentResponseDto {
+    private long id;
+    private UserEntity user;
     private Movie movie;
     private int rating;
     private String description;

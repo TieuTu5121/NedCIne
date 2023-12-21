@@ -32,6 +32,10 @@ const orderApi = {
     });
     return response;
   },
+  vnpayOrder: async (orderCreateRequestDto) => {
+    const response = await http.post("orders/VNPay", orderCreateRequestDto);
+    return response;
+  },
 };
 
 export default orderApi;

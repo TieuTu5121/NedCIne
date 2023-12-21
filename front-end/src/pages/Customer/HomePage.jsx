@@ -12,6 +12,7 @@ import emailApi from "../../apis/emailApi";
 import { toast } from "react-hot-toast";
 import ReceiptEmail from "../../emails/Receipt";
 import Email from "../../emails/wellcomEmail";
+import { colors } from "@mui/material";
 const HomePage = () => {
   const [movies, setMovies] = useState([]);
 
@@ -94,7 +95,7 @@ const HomePage = () => {
           <MovieSlider movies={movies} movieStatus="SHOWING" />
         </div>
 
-        <div className="movie-slider mt-8">
+        <div className="movie-slider my-8">
           <div className="flex justify-center">
             <img
               className="h-8 w-80"
@@ -111,11 +112,12 @@ const HomePage = () => {
           <MovieSlider movies={movies} movieStatus="COMING" />
         </div>
 
-        <div className="relative flex border-t-2 border-b-2 border-black w-full overflow-x-auto  hidden md:block">
-          <ul className="flex space-x-4">
+        <div className="relative flex border-t-2 border-b-2 border-black  overflow-x-auto   hidden md:block">
+          <ul className="flex justify-between uppercase text-sm py-1 items-center px-2">
             <li>
               <a
-                className="dx"
+                className="whitespace-nowrap dx"
+                style={{ color: "#d1d2d4" }}
                 href="https://www.cgv.vn/default/theaters/special/4dx"
               >
                 4DX
@@ -123,7 +125,8 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                className="imax"
+                className=" whitespace-nowrap imax font-bold"
+                style={{ color: "#0096d7" }}
                 href="https://www.cgv.vn/default/theaters/special/imax"
               >
                 Imax
@@ -131,15 +134,17 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                className="starium"
+                className=" whitespace-nowrap starium  font-semibold tracking-wider"
                 href="https://www.cgv.vn/default/theaters/special/starium"
+                style={{ color: "#f68b1f" }}
               >
                 Starium
               </a>
             </li>
             <li>
               <a
-                className="gold-className"
+                className=" whitespace-nowrap gold-className font-thin  "
+                style={{ fontFamily: "Verdana, Arial, sans-serif" }}
                 href="https://www.cgv.vn/default/theaters/special/gold-className"
               >
                 Goldclass
@@ -147,7 +152,7 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                className="lamour"
+                className=" whitespace-nowrap lamour font-bold"
                 href="https://www.cgv.vn/default/theaters/special/lamour"
               >
                 L'amour
@@ -155,7 +160,8 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                className="sweet"
+                className=" whitespace-nowrap sweet font-bold"
+                style={{ color: "#ee2375" }}
                 href="https://www.cgv.vn/default/theaters/special/sweetbox"
               >
                 Sweetbox
@@ -163,7 +169,8 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                className="premium-cinema"
+                className=" whitespace-nowrap premium-cinema font-bold"
+                style={{ color: "#ed1c24" }}
                 href="https://www.cgv.vn/default/theaters/special/premium"
               >
                 Premium Cinema
@@ -171,15 +178,16 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                className="screenx"
+                className=" whitespace-nowrap screenx font-bold"
                 href="https://www.cgv.vn/default/theaters/special/screenx"
+                style={{ color: "#d1d2d4" }}
               >
                 Screenx
               </a>
             </li>
             <li>
               <a
-                className="cine-foret"
+                className=" whitespace-nowrap cine-foret"
                 href="https://www.cgv.vn/default/theaters/special/cine-foret"
               >
                 Cine &amp; Foret
@@ -187,7 +195,7 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                className="cine-livingroom"
+                className=" whitespace-nowrap cine-livingroom"
                 href="https://www.cgv.vn/default/theaters/special/cine-living"
               >
                 Cine &amp; Living Room
@@ -195,7 +203,7 @@ const HomePage = () => {
             </li>
             <li>
               <a
-                className="cine-suite"
+                className=" whitespace-nowrap cine-suite"
                 href="https://www.cgv.vn/default/theaters/special/cine-suite"
               >
                 Cine Suite

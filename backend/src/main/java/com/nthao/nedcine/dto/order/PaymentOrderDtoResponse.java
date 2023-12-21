@@ -11,15 +11,18 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderRequestCreateDto {
-    private List<SeatSetting> seatSettings;
+public class PaymentOrderDtoResponse {
+    private long id;
+    private List<Ticket> tickets;
     private List<ProductOrderInfo> productOrderInfos;
+    private List<Seat> seats;
     private Showtime showtime;
-    private long userId;
+    private String state;
     private float total;
-    private String status;
-    private float discount;
-    private String createdAt;
     private String paymentType;
 
+    private UserEntity user;
+    private float discount;
+    private String createdAt;
+    private String PaymentUrl;
 }

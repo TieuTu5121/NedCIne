@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface OrderService {
     public List<OrderResponseDto> getAllOrders();
-    public OrderResponseDto createOrder(OrderRequestCreateDto orderResponseDto);
+    public OrderResponseDto createOrder(OrderRequestCreateDto orderResponseDto, String orderStatus);
 
     public OrderResponseDto updateOrder(long id, OrderRequestCreateDto order);
     public List<OrderResponseDto> getOrderByUser(long userId);

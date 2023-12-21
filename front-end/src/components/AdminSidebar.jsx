@@ -11,7 +11,7 @@ function AdminSidebar({ dashboard }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // console.log("user: ", user);
+    console.log("user: ", user);
   }, []);
   const signOut = () => {
     removeData();
@@ -90,14 +90,22 @@ function AdminSidebar({ dashboard }) {
           }`}
         >
           <Link
-            className="block px-4 py-4 hover:bg-blue-600 w-full"
+            className={`block px-4 py-4 hover:bg-blue-600 w-full ${
+              user?.roles[0] == "EMPLOYEE" ? "hidden" : ""
+            } `}
             to="/admin/employee-management"
           >
             Quản lý nhân viên
           </Link>
           <i className="fa-solid fa-chevron-right right-4 absolute"></i>
         </li>
-
+        <li
+          className={`border-b-2 border-gray-300 cursor-pointer flex justify-between items-center ${
+            dashboard === "employee" ? "bg-blue-600" : ""
+          }`}
+        >
+          <i className="fa-solid fa-chevron-right right-4 absolute"></i>
+        </li>
         {/* )} */}
         <li
           className={`border-b-2 border-gray-300 cursor-pointer flex justify-between items-center ${

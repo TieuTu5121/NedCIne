@@ -34,8 +34,10 @@ public class OrderServiceImpl implements OrderService {
     SeatSettingRepository seatSettingRepository;
     @Autowired
     UserRepository userRepository;
- @Autowired
- SeatRepository seatRepository;
+
+    @Autowired
+    SeatRepository seatRepository;
+
     public OrderResponseDto orderMapper(Order order) {
         List<Ticket> tickets = new ArrayList<>();
         List<ProductOrderInfo> productOrderInfos = new ArrayList<>();
@@ -44,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
         tickets = ticketRepository.findAllByOrOrderId(order.getId());
         for (Ticket ticket : tickets) {
             SeatSetting seatSetting1 = seatSettingRepository.getById(ticket.getSeatSettingId());
-            Seat seat = seatRepository.findById((int)seatSetting1.getSeatId()).get();
+            Seat seat = seatRepository.findById((int) seatSetting1.getSeatId()).get();
             showtime = showtimeRepository.findById((int) seatSetting1.getShowtimeId()).get();
             seats.add((seat));
         }
@@ -52,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
         return new OrderResponseDto()
                 .builder()
                 .id(order.getId())
-                .user(userRepository.findById( order.getUserId()).get())
+                .user(userRepository.findById(order.getUserId()).get())
                 .tickets(tickets)
                 .productOrderInfos(productOrderInfos)
                 .showtime(showtime)
@@ -61,6 +63,7 @@ public class OrderServiceImpl implements OrderService {
                 .seats(seats)
                 .state(order.getState())
                 .total(order.getTotal())
+                .paymentType(order.getPaymentType())
                 .build();
 
     }
@@ -74,7 +77,6 @@ public class OrderServiceImpl implements OrderService {
         }
         return orderResponseDtos;
     }
-
 
 
     @Override
@@ -115,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
             // Cập nhật thông tin vé và tính tổng giá trị
             float totalOfOrder = 0;
             for (SeatSetting seatSetting : orderRequestDto.getSeatSettings()) {
-                Showtime showtime = showtimeRepository.findById((int)seatSetting.getShowtimeId()).orElse(null);
+                Showtime showtime = showtimeRepository.findById((int) seatSetting.getShowtimeId()).orElse(null);
                 if (showtime != null) {
                     float priceOfSeat = showtime.getPrice();
                     seatSetting.setStatus("BOOKED");
@@ -157,8 +159,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponseDto getOrderById(long id) {
         Order order = orderRepository.findById(id).get();
-        if(order != null)
-        return orderMapper(order);
+        if (order != null)
+            return orderMapper(order);
         return null;
     }
 
@@ -194,14 +196,15 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public OrderResponseDto createOrder(OrderRequestCreateDto orderRequestDto) {
+    public OrderResponseDto createOrder(OrderRequestCreateDto orderRequestDto, String orderStatus) {
         float totalOfOrder = 0;
         Showtime showtime = new Showtime();
         Order order = orderRepository.save(new Order()
                 .builder()
                 .userId(orderRequestDto.getUserId())
                 .createdAt(orderRequestDto.getCreatedAt())
-                .state("PAID")
+                .state(orderStatus)
+                .paymentType(orderRequestDto.getPaymentType())
                 .build());
 
         List<Ticket> tickets = new ArrayList<>();

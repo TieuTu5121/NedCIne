@@ -172,17 +172,15 @@ const OrderManagement = () => {
                     </td>
                   </tr>
                 ))}
-                {orders.length != 0 && (
-                  <Pagination
-                    className="mt-4 w-full"
-                    count={totalPage}
-                    page={page}
-                    onChange={handleChange}
-                    color="primary"
-                  />
-                )}
               </tbody>
             </table>
+            <Pagination
+              className="mt-4 w-full"
+              count={totalPage}
+              page={page}
+              onChange={handleChange}
+              color="primary"
+            />
           </div>
         </div>
       </div>
