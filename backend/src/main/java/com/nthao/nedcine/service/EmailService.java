@@ -12,4 +12,5 @@ void sendEmail(EmailDetails emailDetails);
     // Method
     // To send an email with attachment
     String sendMailWithAttachment(EmailDetails details);
+    void sendBookingTickectEmail(EmailDetails emailDetails, String movieName, String username,String showtime,String linkOrder);
 }

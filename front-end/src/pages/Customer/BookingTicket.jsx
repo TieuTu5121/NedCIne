@@ -28,6 +28,7 @@ import emailApi from "../../apis/emailApi";
 import { Receipt } from "@mui/icons-material";
 import ReceiptEmail from "../../emails/Receipt";
 import { Result } from "postcss";
+import axios from "axios";
 const BookingTicket = () => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [foodOrder, setFoodOrder] = useState([]);
@@ -128,7 +129,6 @@ const BookingTicket = () => {
   };
 
   const renderSeats = () => {
-    console.log("render seats");
     const rows = [];
     for (let i = 0; i < seats.length; i += 15) {
       const row = seats.slice(i, i + 15);
@@ -246,34 +246,56 @@ const BookingTicket = () => {
         status: seat.status,
       })
     );
+    const paymentType = selectedPayment === "vnpay" ? "VNPAY" : "LIVE";
+
     const data = {
       userId: user.id,
       discount: 0,
       seatSettings: seatSettings,
       productOrderInfos: foodOrder,
       createdAt: new Date(),
+      total: totalFoodPrice + totalSeatPrice,
+      paymentType: paymentType,
     };
-
-    orderApi.createOrder(data).then((data) => {
-      toast.success("Đặt vé thành công!!!");
-      setOrder(data?.data?.data);
-      orderApi.getOrderById(data?.data?.data.id).then((data) => {
-        // console.log(data);
-        emailjs.send(
-          EMAILJS_SERVICE_ID,
-          EMAILJS_COMFIRM_TICKET_TEMPLATE,
-          {
-            name: user?.username,
-            movieTitle: showtime.movie.title,
-            showtime: changeShowtimeToTimeString(),
-            email: user.email,
-            linkOrder: `http://localhost:3000/default/user-orders/view/${data.data.data.id}`,
-          },
-          EMAILJS_PUBLIC_KEY
-        );
+    if (selectedPayment === "vnpay") {
+      orderApi.vnpayOrder(data).then((data) => {
+        // emailjs.send(
+        //   EMAILJS_SERVICE_ID,
+        //   EMAILJS_COMFIRM_TICKET_TEMPLATE,
+        //   {
+        //     name: user?.username,
+        //     movieTitle: showtime.movie.title,
+        //     showtime: changeShowtimeToTimeString(),
+        //     email: user.email,
+        //     linkOrder: `http://localhost:3000/default/user-orders/view/${data.data.data.id}`,
+        //   },
+        //   EMAILJS_PUBLIC_KEY
+        // );
+        const paymentUrl = data.data.data.paymentUrl;
+        window.location.href = paymentUrl;
       });
-      history("/default");
-    });
+    } else {
+      orderApi.createOrder(data).then((data) => {
+        toast.success("Đặt vé thành công!!!");
+        setOrder(data?.data?.data);
+        orderApi.getOrderById(data?.data?.data.id).then((data) => {
+          // console.log(data);
+          emailjs.send(
+            EMAILJS_SERVICE_ID,
+            EMAILJS_COMFIRM_TICKET_TEMPLATE,
+            {
+              name: user?.username,
+              movieTitle: showtime.movie.title,
+              showtime: changeShowtimeToTimeString(),
+              email: user.email,
+              linkOrder: `http://localhost:3000/default/user-orders/view/${data.data.data.id}`,
+            },
+            EMAILJS_PUBLIC_KEY
+          );
+        });
+        history("/default");
+      });
+    }
   };
   const changeShowtimeToTimeString = () => {
     const day = new Date(showtime?.showdate).getDate();
@@ -438,26 +460,16 @@ const BookingTicket = () => {
                     </p>
                     <form className="pay-form">
                       <strong>Chọn phương thức thanh toán: </strong>
-                      <label className="pl-5 pr-2" htmlFor="atm">
-                        Thanh toán bằng ATM
+
+                      <label className="pl-5 pr-2" htmlFor="vnpay">
+                        Thanh toán bằng VNPay
                       </label>
                       <input
                         type="radio"
-                        value="atm"
-                        id="atm"
+                        value="vnpay"
+                        id="vnpay"
                         name="pay"
-                        checked={selectedPayment === "atm"}
-                        onChange={handlePaymentChange}
-                      />
-                      <label className="pl-5 pr-2" htmlFor="momo">
-                        Thanh toán bằng MOMO
-                      </label>
-                      <input
-                        type="radio"
-                        value="MOMO"
-                        id="momo"
-                        name="pay"
-                        checked={selectedPayment === "MOMO"}
+                        checked={selectedPayment === "vnpay"}
                         onChange={handlePaymentChange}
                       />
                       <label className="pl-5 pr-2" htmlFor="cash">

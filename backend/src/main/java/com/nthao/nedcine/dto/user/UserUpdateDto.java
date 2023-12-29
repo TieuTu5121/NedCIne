@@ -1,22 +1,18 @@
 package com.nthao.nedcine.dto.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserResponseDto {
-    private long id;
+public class UserUpdateDto {
     private String username;
     private String email;
     private String sex;
     private String birthday;
     private String address;
+    private String phone;
     private String role;
-private String phone;
-
 }

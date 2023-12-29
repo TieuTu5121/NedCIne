@@ -10,16 +10,20 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Builder
-@Table (name = "Orders")
-public class Order {
+@Table(name = "Comments", uniqueConstraints = {@UniqueConstraint(columnNames = {"userId", "movieId"})})
+public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    private float total;
-    private long userId;
-    private String state;
-    private float discount;
-    private String createdAt;
-    private String paymentType;
 
+
+    private long userId;
+
+
+    private int movieId;
+
+    private int rating;
+    private String description;
+    private String createdAt;
 }

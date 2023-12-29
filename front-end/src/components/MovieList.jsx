@@ -5,6 +5,9 @@ import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
 import MovieItem from "./MovieItem";
 const MovieList = ({ movies, movieStatus }) => {
+  useEffect(() => {
+    console.log("movieList: ", movies);
+  }, []);
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -31,7 +34,7 @@ const MovieList = ({ movies, movieStatus }) => {
             return movie.status == movieStatus || movieStatus === "";
           })
           .map((movie) => (
-            <MovieItem movie={movie} />
+            <MovieItem movie={movie} key={movie.id} />
           ))}
       </div>
     </>

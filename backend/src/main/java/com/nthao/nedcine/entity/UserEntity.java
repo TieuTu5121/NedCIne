@@ -39,6 +39,7 @@ public class UserEntity implements UserDetails {
     private String sex;
     private String birthday;
     private String address;
+    private String phone;
     @ElementCollection (targetClass = Role.class, fetch = FetchType.EAGER)
     @Enumerated (EnumType.STRING)
     private Set<Role> roles;

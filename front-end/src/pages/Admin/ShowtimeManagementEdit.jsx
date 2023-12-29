@@ -297,6 +297,7 @@ const ShowtimeManagementEdit = () => {
                     placeholder="Chọn phòng chiếu"
                     onChange={(e) => setChoosenRoomId(e.target.value)}
                   >
+                    <option value="">Chọn phòng chiếu</option>
                     {rooms.length !== 0 &&
                       rooms.map((room) => {
                         return (
@@ -327,6 +328,7 @@ const ShowtimeManagementEdit = () => {
                       setChoosenMovieId(e.target.value);
                     }}
                   >
+                    <option value="">Chọn phim</option>
                     {movies.length !== 0 &&
                       movies.map((movie) => {
                         return (

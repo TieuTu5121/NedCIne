@@ -28,6 +28,7 @@ import BookingTicket from "./Customer/BookingTicket";
 import UserOrders from "./Customer/UserOrders";
 import OrderDetail from "./Customer/OrderDetail";
 import AdminSignIn from "./Admin/AdminSignIn";
+import Search from "./Customer/Search";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
               path="/default/user-orders/view/:id"
               element={<OrderDetail />}
             />
+            <Route path="/default/result" element={<Search />} />
           </Route>
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminIndex />} />

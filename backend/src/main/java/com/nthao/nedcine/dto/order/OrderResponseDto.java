@@ -23,4 +23,6 @@
         private UserEntity user;
         private float discount;
         private String createdAt;
+        private String paymentType;
+
     }

@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 //@EnableManagementContext
 @Configuration
 @EnableWebSecurity
@@ -35,8 +36,7 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
+        return username -> userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("user not found"));
     }
 
     @Bean
@@ -59,36 +59,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .cors() // Cho phép CORS từ tất cả các nguồn
-                .and()
-                .authorizeRequests()
-                .requestMatchers(
-                        new AntPathRequestMatcher("/api/v1/auth/login"),
-                        new AntPathRequestMatcher("/api/v1/auth/register"),
-                        new AntPathRequestMatcher("/api/v1/movies/**"),
-                        new AntPathRequestMatcher("/api/v1/cinemas/**"),
-                        new AntPathRequestMatcher("/api/v1/products/**"),
-                        new AntPathRequestMatcher("/api/v1/rooms/**"),
-                        new AntPathRequestMatcher("/api/v1/showtimes/**"),
-                        new AntPathRequestMatcher("/api/v1/seat-settings/**"),
-                        new AntPathRequestMatcher("/actuator/**"),
-                        new AntPathRequestMatcher("/api/v1/orders/**"),
-                        new AntPathRequestMatcher("/api/v1/emails/**")
+        http.csrf().disable().cors() // Cho phép CORS từ tất cả các nguồn
+                .and().authorizeRequests().requestMatchers(new AntPathRequestMatcher("/api/v1/auth/login"), new AntPathRequestMatcher("/api/v1/auth/register"), new AntPathRequestMatcher("/api/v1/users/**"),
 
-                )
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .exceptionHandling() // Thêm phần xử lý ngoại lệ
+                        new AntPathRequestMatcher("/api/v1/movies/**")
+                        , new AntPathRequestMatcher("/api/v1/cinemas/**")
+                        , new AntPathRequestMatcher("/api/v1/products/**"), new AntPathRequestMatcher("/api/v1/rooms/**"), new AntPathRequestMatcher("/api/v1/showtimes/**"), new AntPathRequestMatcher("/api/v1/seat-settings/**"), new AntPathRequestMatcher("/actuator/**"), new AntPathRequestMatcher("/api/v1/orders/**"), new AntPathRequestMatcher("/api/v1/emails/**")
+                        , new AntPathRequestMatcher("/api/v1/comments/**")
+
+                ).permitAll().anyRequest().authenticated().and().exceptionHandling() // Thêm phần xử lý ngoại lệ
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint) // Sử dụng JwtAuthenticationEntryPoint khi không xác thực
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider())
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authenticationProvider(authenticationProvider())
 
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

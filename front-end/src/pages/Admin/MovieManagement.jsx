@@ -98,7 +98,7 @@ const MovieManagement = () => {
                       <tr key={movies.id} className="bg-white border-b">
                         <td
                           colSpan="2"
-                          className="py-4 px-6 font-bold text-gray-900 whitespace-nowrap"
+                          className="py-4 px-6 font-bold text-gray-900 "
                         >
                           {movies.title}
                         </td>

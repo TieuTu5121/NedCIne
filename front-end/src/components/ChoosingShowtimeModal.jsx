@@ -10,7 +10,7 @@ import { Calculate } from "@mui/icons-material";
 import { useContext } from "react";
 import { UserContext } from "./UserContext";
 
-const ChosingShowtimeModal = ({ isOpen, onClose }) => {
+const ChosingShowtimeModal = ({ movieId, isOpen, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [dates, setDates] = useState([]);
   const [selectedCity, setSelectedCity] = useState("");
@@ -25,7 +25,8 @@ const ChosingShowtimeModal = ({ isOpen, onClose }) => {
     if (selectedCity !== "" && selectedDate !== null) {
       fetchShowtimeByDateAndCity(selectedDate, selectedCity);
     }
-    console.log("fetchShowtimeByDateAndCity: ", showtimesByCityAndDate);
+    // console.log(movieId);
+    // console.log("fetchShowtimeByDateAndCity: ", showtimesByCityAndDate);
   }, [selectedCity, selectedDate]);
   const style = {
     position: "fixed",
@@ -44,7 +45,7 @@ const ChosingShowtimeModal = ({ isOpen, onClose }) => {
   const fetchShowtimeByDateAndCity = async (date, city) => {
     try {
       const data = {
-        movieId: id, // Chỉnh sửa ID phim theo cần thiết
+        movieId: movieId, // Chỉnh sửa ID phim theo cần thiết
         city,
         date,
       };

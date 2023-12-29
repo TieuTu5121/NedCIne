@@ -219,20 +219,18 @@ body {
 .Item img {
   margin-top: 2%;
   display: inline;
-  width: 90%;
-  margin-bottom: 7%;
+  width: 93%;
+  
   cursor: pointer;
-  border-radius: 6px;
+
 }
 
-.Item img:hover{
-  scale: 1.1;
-}
+
 
 .Movies .Item img {
   width: 20%;
   margin-right: 4%;
-  margin-bottom: 2%;
+  
 }
 
 .Movies {
